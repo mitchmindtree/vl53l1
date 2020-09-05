@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "generate-register-map",
+    "vl53l1",
+]
