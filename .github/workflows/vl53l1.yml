@@ -74,3 +74,24 @@ jobs:
       with:
         command: doc
         args: --manifest-path lib/Cargo.toml --verbose
+
+  # Publish.
+  cargo-publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    env:
+      CRATESIO_TOKEN: ${{ secrets.CRATESIO_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+    - name: Cargo publish vl53l1-reg
+      continue-on-error: true
+      run: cargo publish --token $CRATESIO_TOKEN --manifest-path lib/vl53l1-reg/Cargo.toml
+    - name: Cargo publish vl53l1
+      continue-on-error: true
+      run: cargo publish --token $CRATESIO_TOKEN --manifest-path lib/vl53l1/Cargo.toml
