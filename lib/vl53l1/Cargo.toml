@@ -2,6 +2,12 @@
 name = "vl53l1"
 version = "0.1.0"
 authors = ["mitchmindtree <mitchell.nordine@gmail.com>"]
+description = "A pure-Rust port of the official ST VL53L1X ToF sensor C API."
+readme = "../README.md"
+keywords = ["ST", "ToF", "sensor", "VL53L1X", "driver"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/mitchmindtree/vl53l1.git"
+homepage = "https://github.com/mitchmindtree/vl53l1"
 edition = "2018"
 
 [dependencies]
