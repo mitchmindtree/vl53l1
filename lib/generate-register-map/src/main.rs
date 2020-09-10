@@ -55,6 +55,16 @@ enum Value {
     U32(u32),
 }
 
+fn value_to_string(v: &Value) -> String {
+    match *v {
+        Value::I16(i) => i.to_string(),
+        Value::I32(i) => i.to_string(),
+        Value::U8(u) => u.to_string(),
+        Value::U16(u) => u.to_string(),
+        Value::U32(u) => u.to_string(),
+    }
+}
+
 fn main() {
     let mut args = std::env::args();
     let _ = args.next();
@@ -234,36 +244,13 @@ fn generate_reg_rs(entry_infos: &[EntryInfo]) -> String {
 //! - See the `Index` type for a dynamic representation of entry indices into the register map.
 //! - See the `State` type for a dynamic representation of entry state.
 
-#![allow(non_snake_case)]
-
-pub mod settings;
-pub mod structs;
-
-/// Implemented for all entries within the register map.
-///
-/// An entry represents a single value represented by 1, 2 or 4 8-bit registers.
-pub trait Entry: Sized {
-    /// The unique index indicating the location of the entry within the register map.
-    const INDEX: Index;
-    /// The array type representing the entry encoded in bytes ordered for I2C (MSB).
-    type Array: AsMut<[u8]> + AsRef<[u8]> + Default;
-
-    /// Encode self in an array, ready for transmission over I2C (to MSB).
-    fn into_array(self) -> Self::Array;
-    /// Decode self from an of bytes in the order they were received over I2C (from MSB).
-    fn from_array(arr: Self::Array) -> Self;
-    /// Access the `Index` via reference.
-    fn index(&self) -> Index {
-        Self::INDEX
-    }
-}
+use crate::Entry;
 "##
     .to_string();
 
     // Type definitions.
     let mut type_defs: Vec<String> = Vec::new();
     for entry in entry_infos {
-
         let ty = entry.ty.unwrap_or_else(|| ty_from_i2c_size(entry.i2c_size));
         let ty_size = ty_size(ty);
 
@@ -273,20 +260,26 @@ pub trait Entry: Sized {
         let u_ty = ty_u_str(ty);
         let ty = ty_str(ty);
 
+        // For those without an explicit default, use the primitive's default.
+        let default = match entry.default {
+            None => "\n    #[derive(Default)]",
+            Some(_) => "",
+        };
+
         let mut s = "bitfield! {".to_string();
         write!(
             &mut s,
             r#"
-    #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Clone, Copy, Eq, Hash, PartialEq)]{}
     pub struct {}({});
     impl Debug;
     {};"#,
-            entry.name, u_ty, ty,
+            default, entry.name, u_ty, ty,
         )
         .unwrap();
 
-        if entry.fields.is_empty()
-            || entry.fields.len() == 1 // && entry.fields[0].name == &entry.name.to_lowercase()[..]
+        if entry.fields.is_empty() || entry.fields.len() == 1
+        // && entry.fields[0].name == &entry.name.to_lowercase()[..]
         {
             let bit_range = match entry.msb == entry.lsb {
                 true => format!("{}", entry.msb),
@@ -403,17 +396,18 @@ pub enum State {
         write!(
             &mut entry_impls,
             "    const INDEX: Index = Index::{};\n    type Array = [u8; {}];\n\n",
-            index_name,
-            entry.i2c_size,
+            index_name, entry.i2c_size,
         )
         .unwrap();
 
         // Methods.
-        entry_impls.push_str("    fn into_array(self) -> Self::Array {
+        entry_impls.push_str(
+            "    fn into_array(self) -> Self::Array {
         self.0.to_be_bytes()
     }
 
-    fn from_array(arr: Self::Array) -> Self {");
+    fn from_array(arr: Self::Array) -> Self {",
+        );
 
         write!(
             &mut entry_impls,
@@ -426,6 +420,31 @@ pub enum State {
 
         entry_impls.push_str("}\n\n");
     }
+
+    // Manual default implementations for those with specified defaults.
+    let mut default_impls = String::new();
+    for entry in entry_infos {
+        let default = match entry.default {
+            None => continue,
+            Some(Default::Value(ref v)) => value_to_string(v),
+            Some(Default::Named(ref s)) => format!("crate::settings::{}", s),
+        };
+        write!(&mut default_impls, "impl Default for {} ", entry.name).unwrap();
+        default_impls.push_str("{\n    fn default() -> Self {\n");
+        write!(&mut default_impls, "        Self({})", default).unwrap();
+        default_impls.push_str("\n    }\n}\n\n");
+    }
+
+    // TODO: How to do this conversion safely?
+    // // Entry <-> ty conversions.
+    // let mut entry_conversions = String::new();
+    // for entry in entry_infos {
+    //     let ty = ty_u_str(entry.ty.unwrap_or_else(|| ty_from_i2c_size(entry.i2c_size)));
+    //     write!(&mut entry_conversions, "impl From<{}> for {}", ty, entry.name).unwrap();
+    //     entry_conversions.push_str("{\n");
+    //     write!(&mut entry_conversions, "    fn from(t: {}) -> Self", ty);
+    //     entry_conversions.push_str("{\n");
+    //     write!(&mut entry_conversions, "        Self(");
 
     // Index implementation.
     let index_impl = r#"impl Into<[u8; 2]> for Index {
@@ -442,6 +461,7 @@ pub enum State {
         .chain(Some(index_enum_s))
         .chain(Some(state_enum_s))
         .chain(Some(entry_impls))
+        .chain(Some(default_impls))
         .chain(Some(index_impl))
         .map(|s| format!("{}\n", s))
         .collect()

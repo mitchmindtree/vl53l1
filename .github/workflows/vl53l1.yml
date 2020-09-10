@@ -1,0 +1,76 @@
+name: vl53l1
+on: [push, pull_request]
+jobs:
+  # Check for standard formatting.
+  rustfmt-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+        components: rustfmt
+    - name: Run rustfmt vl53l1
+      uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --manifest-path lib/vl53l1/Cargo.toml -- --check
+    - name: Run rustfmt vl53l1-reg
+      uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --manifest-path lib/vl53l1-reg/Cargo.toml -- --check
+    - name: Run rustfmt generate-register-map
+      uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --manifest-path lib/generate-register-map/Cargo.toml -- --check
+    - name: Run rustfmt stm32f107-demo
+      uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --manifest-path examples/stm32f107-demo/Cargo.toml -- --check
+
+  # Build and test the crates.
+  cargo-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+    - name: cargo test lib
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
+        args: --manifest-path lib/Cargo.toml --verbose
+    - name: Add embedded target
+      run: rustup target add thumbv7m-none-eabi
+    - name: cargo check examples
+      uses: actions-rs/cargo@v1
+      with:
+        command: check
+        args: --manifest-path examples/stm32f107-demo/Cargo.toml --verbose
+
+  # Check the docs build.
+  cargo-doc:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install stable
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+    - name: cargo doc
+      uses: actions-rs/cargo@v1
+      with:
+        command: doc
+        args: --manifest-path lib/Cargo.toml --verbose

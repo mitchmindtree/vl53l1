@@ -20,7 +20,7 @@ pub const GROUPEDPARAMETERHOLD_ID_MASK: u8 = 0x02;
 
 pub const EWOK_I2C_DEV_ADDR_DEFAULT: u8 = 0x29;
 
-pub const OSC_FREQUENCY: u8 = 0x00;
+pub const OSC_FREQUENCY: u16 = 0x00;
 pub const OSC_TRIM_DEFAULT: u8 = 0x00;
 pub const OSC_FREQ_SET_DEFAULT: u8 = 0x00;
 

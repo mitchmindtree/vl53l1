@@ -7,32 +7,11 @@
 //! - See the `Index` type for a dynamic representation of entry indices into the register map.
 //! - See the `State` type for a dynamic representation of entry state.
 
-#![allow(non_snake_case)]
-
-pub mod settings;
-pub mod structs;
-
-/// Implemented for all entries within the register map.
-///
-/// An entry represents a single value represented by 1, 2 or 4 8-bit registers.
-pub trait Entry: Sized {
-    /// The unique index indicating the location of the entry within the register map.
-    const INDEX: Index;
-    /// The array type representing the entry encoded in bytes ordered for I2C (MSB).
-    type Array: AsMut<[u8]> + AsRef<[u8]> + Default;
-
-    /// Encode self in an array, ready for transmission over I2C (to MSB).
-    fn into_array(self) -> Self::Array;
-    /// Decode self from an of bytes in the order they were received over I2C (from MSB).
-    fn from_array(arr: Self::Array) -> Self;
-    /// Access the `Index` via reference.
-    fn index(&self) -> Index {
-        Self::INDEX
-    }
-}
+use crate::Entry;
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SOFT_RESET(u8);
     impl Debug;
     u8;
@@ -89,6 +68,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct OSC_MEASURED__FAST_OSC__FREQUENCY_HI(u8);
     impl Debug;
     u8;
@@ -97,6 +77,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct OSC_MEASURED__FAST_OSC__FREQUENCY_LO(u8);
     impl Debug;
     u8;
@@ -219,6 +200,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_HI(u8);
     impl Debug;
     u8;
@@ -227,6 +209,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_LO(u8);
     impl Debug;
     u8;
@@ -243,6 +226,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_HI(u8);
     impl Debug;
     u8;
@@ -251,6 +235,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_LO(u8);
     impl Debug;
     u8;
@@ -267,6 +252,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_HI(u8);
     impl Debug;
     u8;
@@ -275,6 +261,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_LO(u8);
     impl Debug;
     u8;
@@ -291,6 +278,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -299,6 +287,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -315,6 +304,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__PART_TO_PART_RANGE_OFFSET_MM_HI(u8);
     impl Debug;
     u8;
@@ -323,6 +313,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__PART_TO_PART_RANGE_OFFSET_MM_LO(u8);
     impl Debug;
     u8;
@@ -339,6 +330,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_CONFIG__INNER_OFFSET_MM_HI(u8);
     impl Debug;
     u8;
@@ -347,6 +339,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_CONFIG__INNER_OFFSET_MM_LO(u8);
     impl Debug;
     u8;
@@ -363,6 +356,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_CONFIG__OUTER_OFFSET_MM_HI(u8);
     impl Debug;
     u8;
@@ -371,6 +365,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_CONFIG__OUTER_OFFSET_MM_LO(u8);
     impl Debug;
     u8;
@@ -387,6 +382,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_CONFIG__TARGET_TOTAL_RATE_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -395,6 +391,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_CONFIG__TARGET_TOTAL_RATE_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -599,6 +596,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__RANGE_IGNORE_THRESHOLD_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -607,6 +605,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct ALGO__RANGE_IGNORE_THRESHOLD_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -710,6 +709,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct CAL_CONFIG__REPEAT_RATE_HI(u8);
     impl Debug;
     u8;
@@ -718,6 +718,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct CAL_CONFIG__REPEAT_RATE_LO(u8);
     impl Debug;
     u8;
@@ -775,6 +776,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_RATE_HIGH_HI(u8);
     impl Debug;
     u8;
@@ -783,6 +785,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_RATE_HIGH_LO(u8);
     impl Debug;
     u8;
@@ -799,6 +802,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_RATE_LOW_HI(u8);
     impl Debug;
     u8;
@@ -807,6 +811,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_RATE_LOW_LO(u8);
     impl Debug;
     u8;
@@ -823,6 +828,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_HI(u8);
     impl Debug;
     u8;
@@ -831,6 +837,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_LO(u8);
     impl Debug;
     u8;
@@ -959,6 +966,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_CONFIG__SIGMA_THRESH_HI(u8);
     impl Debug;
     u8;
@@ -967,6 +975,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_CONFIG__SIGMA_THRESH_LO(u8);
     impl Debug;
     u8;
@@ -983,6 +992,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -991,6 +1001,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -1023,6 +1034,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__INTERMEASUREMENT_PERIOD_3(u8);
     impl Debug;
     u8;
@@ -1031,6 +1043,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__INTERMEASUREMENT_PERIOD_2(u8);
     impl Debug;
     u8;
@@ -1039,6 +1052,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__INTERMEASUREMENT_PERIOD_1(u8);
     impl Debug;
     u8;
@@ -1047,6 +1061,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__INTERMEASUREMENT_PERIOD_0(u8);
     impl Debug;
     u8;
@@ -1080,6 +1095,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_HIGH_HI(u8);
     impl Debug;
     u8;
@@ -1088,6 +1104,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_HIGH_LO(u8);
     impl Debug;
     u8;
@@ -1104,6 +1121,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_LOW_HI(u8);
     impl Debug;
     u8;
@@ -1112,6 +1130,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SYSTEM__THRESH_LOW_LO(u8);
     impl Debug;
     u8;
@@ -1326,6 +1345,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1334,6 +1354,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1350,6 +1371,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1358,6 +1380,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1374,6 +1397,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1382,6 +1406,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1398,6 +1423,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SIGMA_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1406,6 +1432,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SIGMA_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1422,6 +1449,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PHASE_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1430,6 +1458,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PHASE_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1446,6 +1475,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1454,6 +1484,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1470,6 +1501,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1478,6 +1510,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1494,6 +1527,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1502,6 +1536,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1518,6 +1553,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1526,6 +1562,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1542,6 +1579,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -1550,6 +1588,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -1566,6 +1605,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1574,6 +1614,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1590,6 +1631,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1598,6 +1640,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1614,6 +1657,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1622,6 +1666,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1638,6 +1683,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SIGMA_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1646,6 +1692,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SIGMA_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1662,6 +1709,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PHASE_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1670,6 +1718,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__PHASE_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1686,6 +1735,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1694,6 +1744,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1710,6 +1761,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SPARE_0_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1718,6 +1770,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SPARE_0_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1734,6 +1787,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SPARE_1_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1742,6 +1796,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SPARE_1_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1758,6 +1813,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SPARE_2_SD1_HI(u8);
     impl Debug;
     u8;
@@ -1766,6 +1822,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__SPARE_2_SD1_LO(u8);
     impl Debug;
     u8;
@@ -1799,6 +1856,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -1807,6 +1865,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -1815,6 +1874,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -1823,6 +1883,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -1839,6 +1900,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -1847,6 +1909,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -1855,6 +1918,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -1863,6 +1927,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -1879,6 +1944,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -1887,6 +1953,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -1895,6 +1962,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -1903,6 +1971,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -1919,6 +1988,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(u8);
     impl Debug;
     u8;
@@ -1927,6 +1997,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(u8);
     impl Debug;
     u8;
@@ -1935,6 +2006,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(u8);
     impl Debug;
     u8;
@@ -1943,6 +2015,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(u8);
     impl Debug;
     u8;
@@ -1959,6 +2032,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -1967,6 +2041,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -1975,6 +2050,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -1983,6 +2059,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -1999,6 +2076,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -2007,6 +2085,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -2015,6 +2094,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -2023,6 +2103,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -2039,6 +2120,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -2047,6 +2129,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -2055,6 +2138,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -2063,6 +2147,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -2079,6 +2164,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(u8);
     impl Debug;
     u8;
@@ -2087,6 +2173,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(u8);
     impl Debug;
     u8;
@@ -2095,6 +2182,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(u8);
     impl Debug;
     u8;
@@ -2103,6 +2191,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(u8);
     impl Debug;
     u8;
@@ -2127,6 +2216,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PHASECAL_RESULT__REFERENCE_PHASE_HI(u8);
     impl Debug;
     u8;
@@ -2135,6 +2225,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PHASECAL_RESULT__REFERENCE_PHASE_LO(u8);
     impl Debug;
     u8;
@@ -2199,6 +2290,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__OSC_CALIBRATE_VAL_HI(u8);
     impl Debug;
     u8;
@@ -2207,6 +2299,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RESULT__OSC_CALIBRATE_VAL_LO(u8);
     impl Debug;
     u8;
@@ -2294,6 +2387,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct FIRMWARE__CAL_REPEAT_RATE_COUNTER_HI(u8);
     impl Debug;
     u8;
@@ -2302,6 +2396,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct FIRMWARE__CAL_REPEAT_RATE_COUNTER_LO(u8);
     impl Debug;
     u8;
@@ -2310,6 +2405,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct FIRMWARE__HISTOGRAM_BIN(u8);
     impl Debug;
     u8;
@@ -2326,6 +2422,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_HIGH_HI(u8);
     impl Debug;
     u8;
@@ -2334,6 +2431,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_HIGH_LO(u8);
     impl Debug;
     u8;
@@ -2350,6 +2448,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_LOW_HI(u8);
     impl Debug;
     u8;
@@ -2358,6 +2457,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_LOW_LO(u8);
     impl Debug;
     u8;
@@ -2561,6 +2661,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PLL_PERIOD_US_3(u8);
     impl Debug;
     u8;
@@ -2569,6 +2670,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PLL_PERIOD_US_2(u8);
     impl Debug;
     u8;
@@ -2577,6 +2679,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PLL_PERIOD_US_1(u8);
     impl Debug;
     u8;
@@ -2585,6 +2688,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PLL_PERIOD_US_0(u8);
     impl Debug;
     u8;
@@ -2601,6 +2705,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct INTERRUPT_SCHEDULER__DATA_OUT_3(u8);
     impl Debug;
     u8;
@@ -2609,6 +2714,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct INTERRUPT_SCHEDULER__DATA_OUT_2(u8);
     impl Debug;
     u8;
@@ -2617,6 +2723,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct INTERRUPT_SCHEDULER__DATA_OUT_1(u8);
     impl Debug;
     u8;
@@ -2625,6 +2732,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct INTERRUPT_SCHEDULER__DATA_OUT_0(u8);
     impl Debug;
     u8;
@@ -2682,6 +2790,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct IDENTIFICATION__MODULE_ID_HI(u8);
     impl Debug;
     u8;
@@ -2690,6 +2799,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct IDENTIFICATION__MODULE_ID_LO(u8);
     impl Debug;
     u8;
@@ -3050,6 +3160,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GO2_HOST_BANK_ACCESS__OVERRIDE(u8);
     impl Debug;
     u8;
@@ -3058,6 +3169,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLICAND(u8);
     impl Debug;
     u8;
@@ -3066,6 +3178,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLICAND_3(u8);
     impl Debug;
     u8;
@@ -3074,6 +3187,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLICAND_2(u8);
     impl Debug;
     u8;
@@ -3082,6 +3196,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLICAND_1(u8);
     impl Debug;
     u8;
@@ -3090,6 +3205,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLICAND_0(u8);
     impl Debug;
     u8;
@@ -3098,6 +3214,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLIER(u8);
     impl Debug;
     u8;
@@ -3106,6 +3223,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLIER_3(u8);
     impl Debug;
     u8;
@@ -3114,6 +3232,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLIER_2(u8);
     impl Debug;
     u8;
@@ -3122,6 +3241,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLIER_1(u8);
     impl Debug;
     u8;
@@ -3130,6 +3250,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__MULTIPLIER_0(u8);
     impl Debug;
     u8;
@@ -3138,6 +3259,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_HI(u8);
     impl Debug;
     u8;
@@ -3146,6 +3268,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_HI_3(u8);
     impl Debug;
     u8;
@@ -3154,6 +3277,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_HI_2(u8);
     impl Debug;
     u8;
@@ -3162,6 +3286,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_HI_1(u8);
     impl Debug;
     u8;
@@ -3170,6 +3295,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_HI_0(u8);
     impl Debug;
     u8;
@@ -3178,6 +3304,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_LO(u8);
     impl Debug;
     u8;
@@ -3186,6 +3313,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_LO_3(u8);
     impl Debug;
     u8;
@@ -3194,6 +3322,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_LO_2(u8);
     impl Debug;
     u8;
@@ -3202,6 +3331,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_LO_1(u8);
     impl Debug;
     u8;
@@ -3210,6 +3340,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__PRODUCT_LO_0(u8);
     impl Debug;
     u8;
@@ -3218,6 +3349,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__START(u8);
     impl Debug;
     u8;
@@ -3226,6 +3358,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_MULTIPLIER__STATUS(u8);
     impl Debug;
     u8;
@@ -3234,6 +3367,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__START(u8);
     impl Debug;
     u8;
@@ -3242,6 +3376,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__STATUS(u8);
     impl Debug;
     u8;
@@ -3250,6 +3385,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVIDEND(u8);
     impl Debug;
     u8;
@@ -3258,6 +3394,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVIDEND_3(u8);
     impl Debug;
     u8;
@@ -3266,6 +3403,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVIDEND_2(u8);
     impl Debug;
     u8;
@@ -3274,6 +3412,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVIDEND_1(u8);
     impl Debug;
     u8;
@@ -3282,6 +3421,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVIDEND_0(u8);
     impl Debug;
     u8;
@@ -3290,6 +3430,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVISOR(u8);
     impl Debug;
     u8;
@@ -3298,6 +3439,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVISOR_3(u8);
     impl Debug;
     u8;
@@ -3306,6 +3448,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVISOR_2(u8);
     impl Debug;
     u8;
@@ -3314,6 +3457,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVISOR_1(u8);
     impl Debug;
     u8;
@@ -3322,6 +3466,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__DIVISOR_0(u8);
     impl Debug;
     u8;
@@ -3330,6 +3475,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__QUOTIENT(u8);
     impl Debug;
     u8;
@@ -3338,6 +3484,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__QUOTIENT_3(u8);
     impl Debug;
     u8;
@@ -3346,6 +3493,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__QUOTIENT_2(u8);
     impl Debug;
     u8;
@@ -3354,6 +3502,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__QUOTIENT_1(u8);
     impl Debug;
     u8;
@@ -3362,6 +3511,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_UTIL_DIVIDER__QUOTIENT_0(u8);
     impl Debug;
     u8;
@@ -3370,6 +3520,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER0__VALUE_IN(u8);
     impl Debug;
     u8;
@@ -3378,6 +3529,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER0__VALUE_IN_3(u8);
     impl Debug;
     u8;
@@ -3386,6 +3538,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER0__VALUE_IN_2(u8);
     impl Debug;
     u8;
@@ -3394,6 +3547,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER0__VALUE_IN_1(u8);
     impl Debug;
     u8;
@@ -3402,6 +3556,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER0__VALUE_IN_0(u8);
     impl Debug;
     u8;
@@ -3410,6 +3565,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER1__VALUE_IN(u8);
     impl Debug;
     u8;
@@ -3418,6 +3574,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER1__VALUE_IN_3(u8);
     impl Debug;
     u8;
@@ -3426,6 +3583,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER1__VALUE_IN_2(u8);
     impl Debug;
     u8;
@@ -3434,6 +3592,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER1__VALUE_IN_1(u8);
     impl Debug;
     u8;
@@ -3442,6 +3601,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER1__VALUE_IN_0(u8);
     impl Debug;
     u8;
@@ -3450,6 +3610,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER0__CTRL(u8);
     impl Debug;
     u8;
@@ -3458,6 +3619,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TIMER1__CTRL(u8);
     impl Debug;
     u8;
@@ -3520,6 +3682,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__OFFSET_CORRECTED_RANGE_HI(u8);
     impl Debug;
     u8;
@@ -3528,6 +3691,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__OFFSET_CORRECTED_RANGE_LO(u8);
     impl Debug;
     u8;
@@ -3544,6 +3708,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__SPARE_4_3(u8);
     impl Debug;
     u8;
@@ -3552,6 +3717,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__SPARE_4_2(u8);
     impl Debug;
     u8;
@@ -3560,6 +3726,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__SPARE_4_1(u8);
     impl Debug;
     u8;
@@ -3568,6 +3735,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__SPARE_4_0(u8);
     impl Debug;
     u8;
@@ -3584,6 +3752,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__AMBIENT_DURATION_PRE_CALC_HI(u8);
     impl Debug;
     u8;
@@ -3592,6 +3761,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__AMBIENT_DURATION_PRE_CALC_LO(u8);
     impl Debug;
     u8;
@@ -3624,6 +3794,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_TOTAL_PERIODS_HI(u8);
     impl Debug;
     u8;
@@ -3632,6 +3803,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_TOTAL_PERIODS_LO(u8);
     impl Debug;
     u8;
@@ -3648,6 +3820,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_ACCUM_PHASE_3(u8);
     impl Debug;
     u8;
@@ -3656,6 +3829,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_ACCUM_PHASE_2(u8);
     impl Debug;
     u8;
@@ -3664,6 +3838,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_ACCUM_PHASE_1(u8);
     impl Debug;
     u8;
@@ -3672,6 +3847,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_ACCUM_PHASE_0(u8);
     impl Debug;
     u8;
@@ -3688,6 +3864,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_SIGNAL_EVENTS_3(u8);
     impl Debug;
     u8;
@@ -3696,6 +3873,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_SIGNAL_EVENTS_2(u8);
     impl Debug;
     u8;
@@ -3704,6 +3882,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_SIGNAL_EVENTS_1(u8);
     impl Debug;
     u8;
@@ -3712,6 +3891,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_SIGNAL_EVENTS_0(u8);
     impl Debug;
     u8;
@@ -3728,6 +3908,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_AMBIENT_EVENTS_3(u8);
     impl Debug;
     u8;
@@ -3736,6 +3917,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_AMBIENT_EVENTS_2(u8);
     impl Debug;
     u8;
@@ -3744,6 +3926,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_AMBIENT_EVENTS_1(u8);
     impl Debug;
     u8;
@@ -3752,6 +3935,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_AMBIENT_EVENTS_0(u8);
     impl Debug;
     u8;
@@ -3768,6 +3952,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__SPARE_6_HI(u8);
     impl Debug;
     u8;
@@ -3776,6 +3961,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__SPARE_6_LO(u8);
     impl Debug;
     u8;
@@ -3792,6 +3978,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_ADJUST_VCSEL_PERIOD_HI(u8);
     impl Debug;
     u8;
@@ -3800,6 +3987,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__ALGO_ADJUST_VCSEL_PERIOD_LO(u8);
     impl Debug;
     u8;
@@ -3816,6 +4004,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__NUM_SPADS_HI(u8);
     impl Debug;
     u8;
@@ -3824,6 +4013,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__NUM_SPADS_LO(u8);
     impl Debug;
     u8;
@@ -3840,6 +4030,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__PHASE_OUTPUT_HI(u8);
     impl Debug;
     u8;
@@ -3848,6 +4039,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__PHASE_OUTPUT_LO(u8);
     impl Debug;
     u8;
@@ -3864,6 +4056,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__RATE_PER_SPAD_MCPS_3(u8);
     impl Debug;
     u8;
@@ -3872,6 +4065,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__RATE_PER_SPAD_MCPS_2(u8);
     impl Debug;
     u8;
@@ -3880,6 +4074,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__RATE_PER_SPAD_MCPS_1(u8);
     impl Debug;
     u8;
@@ -3888,6 +4083,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__RATE_PER_SPAD_MCPS_0(u8);
     impl Debug;
     u8;
@@ -3920,6 +4116,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__PEAK_SIGNAL_RATE_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -3928,6 +4125,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__PEAK_SIGNAL_RATE_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -3944,6 +4142,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__AVG_SIGNAL_RATE_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -3952,6 +4151,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__AVG_SIGNAL_RATE_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -3968,6 +4168,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__AMBIENT_RATE_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -3976,6 +4177,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__AMBIENT_RATE_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -3992,6 +4194,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__XTALK_HI(u8);
     impl Debug;
     u8;
@@ -4000,6 +4203,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__XTALK_LO(u8);
     impl Debug;
     u8;
@@ -4032,6 +4236,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -4040,6 +4245,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -4080,6 +4286,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__CTRL(u8);
     impl Debug;
     u8;
@@ -4088,6 +4295,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__JMP_ENABLES(u8);
     impl Debug;
     u8;
@@ -4096,6 +4304,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__JMP_ENABLES_HI(u8);
     impl Debug;
     u8;
@@ -4104,6 +4313,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__JMP_ENABLES_LO(u8);
     impl Debug;
     u8;
@@ -4112,6 +4322,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__DATA_ENABLES(u8);
     impl Debug;
     u8;
@@ -4120,6 +4331,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__DATA_ENABLES_HI(u8);
     impl Debug;
     u8;
@@ -4128,6 +4340,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__DATA_ENABLES_LO(u8);
     impl Debug;
     u8;
@@ -4136,6 +4349,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_0(u8);
     impl Debug;
     u8;
@@ -4144,6 +4358,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_0_HI(u8);
     impl Debug;
     u8;
@@ -4152,6 +4367,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_0_LO(u8);
     impl Debug;
     u8;
@@ -4160,6 +4376,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_1(u8);
     impl Debug;
     u8;
@@ -4168,6 +4385,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_1_HI(u8);
     impl Debug;
     u8;
@@ -4176,6 +4394,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_1_LO(u8);
     impl Debug;
     u8;
@@ -4184,6 +4403,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_2(u8);
     impl Debug;
     u8;
@@ -4192,6 +4412,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_2_HI(u8);
     impl Debug;
     u8;
@@ -4200,6 +4421,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_2_LO(u8);
     impl Debug;
     u8;
@@ -4208,6 +4430,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_3(u8);
     impl Debug;
     u8;
@@ -4216,6 +4439,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_3_HI(u8);
     impl Debug;
     u8;
@@ -4224,6 +4448,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_3_LO(u8);
     impl Debug;
     u8;
@@ -4232,6 +4457,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_4(u8);
     impl Debug;
     u8;
@@ -4240,6 +4466,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_4_HI(u8);
     impl Debug;
     u8;
@@ -4248,6 +4475,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_4_LO(u8);
     impl Debug;
     u8;
@@ -4256,6 +4484,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_5(u8);
     impl Debug;
     u8;
@@ -4264,6 +4493,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_5_HI(u8);
     impl Debug;
     u8;
@@ -4272,6 +4502,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_5_LO(u8);
     impl Debug;
     u8;
@@ -4280,6 +4511,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_6(u8);
     impl Debug;
     u8;
@@ -4288,6 +4520,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_6_HI(u8);
     impl Debug;
     u8;
@@ -4296,6 +4529,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_6_LO(u8);
     impl Debug;
     u8;
@@ -4304,6 +4538,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_7(u8);
     impl Debug;
     u8;
@@ -4312,6 +4547,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_7_HI(u8);
     impl Debug;
     u8;
@@ -4320,6 +4556,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_7_LO(u8);
     impl Debug;
     u8;
@@ -4328,6 +4565,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_8(u8);
     impl Debug;
     u8;
@@ -4336,6 +4574,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_8_HI(u8);
     impl Debug;
     u8;
@@ -4344,6 +4583,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_8_LO(u8);
     impl Debug;
     u8;
@@ -4352,6 +4592,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_9(u8);
     impl Debug;
     u8;
@@ -4360,6 +4601,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_9_HI(u8);
     impl Debug;
     u8;
@@ -4368,6 +4610,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_9_LO(u8);
     impl Debug;
     u8;
@@ -4376,6 +4619,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_10(u8);
     impl Debug;
     u8;
@@ -4384,6 +4628,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_10_HI(u8);
     impl Debug;
     u8;
@@ -4392,6 +4637,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_10_LO(u8);
     impl Debug;
     u8;
@@ -4400,6 +4646,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_11(u8);
     impl Debug;
     u8;
@@ -4408,6 +4655,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_11_HI(u8);
     impl Debug;
     u8;
@@ -4416,6 +4664,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_11_LO(u8);
     impl Debug;
     u8;
@@ -4424,6 +4673,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_12(u8);
     impl Debug;
     u8;
@@ -4432,6 +4682,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_12_HI(u8);
     impl Debug;
     u8;
@@ -4440,6 +4691,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_12_LO(u8);
     impl Debug;
     u8;
@@ -4448,6 +4700,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_13(u8);
     impl Debug;
     u8;
@@ -4456,6 +4709,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_13_HI(u8);
     impl Debug;
     u8;
@@ -4464,6 +4718,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_13_LO(u8);
     impl Debug;
     u8;
@@ -4472,6 +4727,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_14(u8);
     impl Debug;
     u8;
@@ -4480,6 +4736,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_14_HI(u8);
     impl Debug;
     u8;
@@ -4488,6 +4745,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_14_LO(u8);
     impl Debug;
     u8;
@@ -4496,6 +4754,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_15(u8);
     impl Debug;
     u8;
@@ -4504,6 +4763,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_15_HI(u8);
     impl Debug;
     u8;
@@ -4512,6 +4772,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__OFFSET_15_LO(u8);
     impl Debug;
     u8;
@@ -4520,6 +4781,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_0(u8);
     impl Debug;
     u8;
@@ -4528,6 +4790,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_0_HI(u8);
     impl Debug;
     u8;
@@ -4536,6 +4799,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_0_LO(u8);
     impl Debug;
     u8;
@@ -4544,6 +4808,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_1(u8);
     impl Debug;
     u8;
@@ -4552,6 +4817,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_1_HI(u8);
     impl Debug;
     u8;
@@ -4560,6 +4826,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_1_LO(u8);
     impl Debug;
     u8;
@@ -4568,6 +4835,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_2(u8);
     impl Debug;
     u8;
@@ -4576,6 +4844,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_2_HI(u8);
     impl Debug;
     u8;
@@ -4584,6 +4853,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_2_LO(u8);
     impl Debug;
     u8;
@@ -4592,6 +4862,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_3(u8);
     impl Debug;
     u8;
@@ -4600,6 +4871,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_3_HI(u8);
     impl Debug;
     u8;
@@ -4608,6 +4880,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_3_LO(u8);
     impl Debug;
     u8;
@@ -4616,6 +4889,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_4(u8);
     impl Debug;
     u8;
@@ -4624,6 +4898,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_4_HI(u8);
     impl Debug;
     u8;
@@ -4632,6 +4907,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_4_LO(u8);
     impl Debug;
     u8;
@@ -4640,6 +4916,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_5(u8);
     impl Debug;
     u8;
@@ -4648,6 +4925,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_5_HI(u8);
     impl Debug;
     u8;
@@ -4656,6 +4934,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_5_LO(u8);
     impl Debug;
     u8;
@@ -4664,6 +4943,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_6(u8);
     impl Debug;
     u8;
@@ -4672,6 +4952,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_6_HI(u8);
     impl Debug;
     u8;
@@ -4680,6 +4961,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_6_LO(u8);
     impl Debug;
     u8;
@@ -4688,6 +4970,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_7(u8);
     impl Debug;
     u8;
@@ -4696,6 +4979,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_7_HI(u8);
     impl Debug;
     u8;
@@ -4704,6 +4988,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_7_LO(u8);
     impl Debug;
     u8;
@@ -4712,6 +4997,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_8(u8);
     impl Debug;
     u8;
@@ -4720,6 +5006,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_8_HI(u8);
     impl Debug;
     u8;
@@ -4728,6 +5015,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_8_LO(u8);
     impl Debug;
     u8;
@@ -4736,6 +5024,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_9(u8);
     impl Debug;
     u8;
@@ -4744,6 +5033,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_9_HI(u8);
     impl Debug;
     u8;
@@ -4752,6 +5042,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_9_LO(u8);
     impl Debug;
     u8;
@@ -4760,6 +5051,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_10(u8);
     impl Debug;
     u8;
@@ -4768,6 +5060,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_10_HI(u8);
     impl Debug;
     u8;
@@ -4776,6 +5069,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_10_LO(u8);
     impl Debug;
     u8;
@@ -4784,6 +5078,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_11(u8);
     impl Debug;
     u8;
@@ -4792,6 +5087,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_11_HI(u8);
     impl Debug;
     u8;
@@ -4800,6 +5096,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_11_LO(u8);
     impl Debug;
     u8;
@@ -4808,6 +5105,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_12(u8);
     impl Debug;
     u8;
@@ -4816,6 +5114,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_12_HI(u8);
     impl Debug;
     u8;
@@ -4824,6 +5123,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_12_LO(u8);
     impl Debug;
     u8;
@@ -4832,6 +5132,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_13(u8);
     impl Debug;
     u8;
@@ -4840,6 +5141,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_13_HI(u8);
     impl Debug;
     u8;
@@ -4848,6 +5150,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_13_LO(u8);
     impl Debug;
     u8;
@@ -4856,6 +5159,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_14(u8);
     impl Debug;
     u8;
@@ -4864,6 +5168,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_14_HI(u8);
     impl Debug;
     u8;
@@ -4872,6 +5177,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_14_LO(u8);
     impl Debug;
     u8;
@@ -4880,6 +5186,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_15(u8);
     impl Debug;
     u8;
@@ -4888,6 +5195,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_15_HI(u8);
     impl Debug;
     u8;
@@ -4896,6 +5204,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PATCH__ADDRESS_15_LO(u8);
     impl Debug;
     u8;
@@ -4904,6 +5213,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SPI_ASYNC_MUX__CTRL(u8);
     impl Debug;
     u8;
@@ -4937,6 +5247,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PAD_I2C_LV__CONFIG(u8);
     impl Debug;
     u8;
@@ -4972,6 +5283,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_ROM_CTRL(u8);
     impl Debug;
     u8;
@@ -4980,6 +5292,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_ROM_RESULT(u8);
     impl Debug;
     u8;
@@ -4988,6 +5301,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_ROM_MCU_SIG(u8);
     impl Debug;
     u8;
@@ -4996,6 +5310,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_ROM_MCU_SIG_HI(u8);
     impl Debug;
     u8;
@@ -5004,6 +5319,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_ROM_MCU_SIG_LO(u8);
     impl Debug;
     u8;
@@ -5012,6 +5328,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_RAM_CTRL(u8);
     impl Debug;
     u8;
@@ -5020,6 +5337,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__BIST_RAM_RESULT(u8);
     impl Debug;
     u8;
@@ -5028,6 +5346,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__TMC(u8);
     impl Debug;
     u8;
@@ -5036,6 +5355,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_MIN_THRESHOLD(u8);
     impl Debug;
     u8;
@@ -5044,6 +5364,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_MIN_THRESHOLD_HI(u8);
     impl Debug;
     u8;
@@ -5052,6 +5373,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_MIN_THRESHOLD_LO(u8);
     impl Debug;
     u8;
@@ -5060,6 +5382,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_MAX_THRESHOLD(u8);
     impl Debug;
     u8;
@@ -5068,6 +5391,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_MAX_THRESHOLD_HI(u8);
     impl Debug;
     u8;
@@ -5076,6 +5400,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_MAX_THRESHOLD_LO(u8);
     impl Debug;
     u8;
@@ -5084,6 +5409,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_COUNT_OUT(u8);
     impl Debug;
     u8;
@@ -5092,6 +5418,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_COUNT_OUT_HI(u8);
     impl Debug;
     u8;
@@ -5100,6 +5427,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_COUNT_OUT_LO(u8);
     impl Debug;
     u8;
@@ -5108,6 +5436,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_GONOGO(u8);
     impl Debug;
     u8;
@@ -5116,6 +5445,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct TEST__PLL_BIST_CTRL(u8);
     impl Debug;
     u8;
@@ -5124,6 +5454,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__DEVICE_ID(u8);
     impl Debug;
     u8;
@@ -5132,6 +5463,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REVISION_ID(u8);
     impl Debug;
     u8;
@@ -5140,6 +5472,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CLK_CTRL1(u8);
     impl Debug;
     u8;
@@ -5148,6 +5481,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CLK_CTRL2(u8);
     impl Debug;
     u8;
@@ -5156,6 +5490,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__WOI_1(u8);
     impl Debug;
     u8;
@@ -5164,6 +5499,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__WOI_REF_1(u8);
     impl Debug;
     u8;
@@ -5172,6 +5508,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__START_RANGING(u8);
     impl Debug;
     u8;
@@ -5180,6 +5517,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__LOW_LIMIT_1(u8);
     impl Debug;
     u8;
@@ -5188,6 +5526,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__HIGH_LIMIT_1(u8);
     impl Debug;
     u8;
@@ -5196,6 +5535,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__LOW_LIMIT_REF_1(u8);
     impl Debug;
     u8;
@@ -5204,6 +5544,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__HIGH_LIMIT_REF_1(u8);
     impl Debug;
     u8;
@@ -5212,6 +5553,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__QUANTIFIER_1_MSB(u8);
     impl Debug;
     u8;
@@ -5220,6 +5562,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__QUANTIFIER_1_LSB(u8);
     impl Debug;
     u8;
@@ -5228,6 +5571,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__QUANTIFIER_REF_1_MSB(u8);
     impl Debug;
     u8;
@@ -5236,6 +5580,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__QUANTIFIER_REF_1_LSB(u8);
     impl Debug;
     u8;
@@ -5244,6 +5589,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_OFFSET_1_MSB(u8);
     impl Debug;
     u8;
@@ -5252,6 +5598,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_OFFSET_1_LSB(u8);
     impl Debug;
     u8;
@@ -5260,6 +5607,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_OFFSET_REF_1_MSB(u8);
     impl Debug;
     u8;
@@ -5268,6 +5616,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_OFFSET_REF_1_LSB(u8);
     impl Debug;
     u8;
@@ -5276,6 +5625,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__FILTER_STRENGTH_1(u8);
     impl Debug;
     u8;
@@ -5284,6 +5634,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__FILTER_STRENGTH_REF_1(u8);
     impl Debug;
     u8;
@@ -5292,6 +5643,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_EVENT_LIMIT_1_MSB(u8);
     impl Debug;
     u8;
@@ -5300,6 +5652,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_EVENT_LIMIT_1_LSB(u8);
     impl Debug;
     u8;
@@ -5308,6 +5661,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_EVENT_LIMIT_REF_1_MSB(u8);
     impl Debug;
     u8;
@@ -5316,6 +5670,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_EVENT_LIMIT_REF_1_LSB(u8);
     impl Debug;
     u8;
@@ -5324,6 +5679,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TIMEOUT_OVERALL_PERIODS_MSB(u8);
     impl Debug;
     u8;
@@ -5332,6 +5688,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TIMEOUT_OVERALL_PERIODS_LSB(u8);
     impl Debug;
     u8;
@@ -5340,6 +5697,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__INVERT_HW(u8);
     impl Debug;
     u8;
@@ -5348,6 +5706,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__FORCE_HW(u8);
     impl Debug;
     u8;
@@ -5356,6 +5715,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATIC_HW_VALUE(u8);
     impl Debug;
     u8;
@@ -5364,6 +5724,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__FORCE_CONTINUOUS_AMBIENT(u8);
     impl Debug;
     u8;
@@ -5372,6 +5733,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TEST_PHASE_SELECT_TO_FILTER(u8);
     impl Debug;
     u8;
@@ -5380,6 +5742,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TEST_PHASE_SELECT_TO_TIMING_GEN(u8);
     impl Debug;
     u8;
@@ -5388,6 +5751,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__INITIAL_PHASE_VALUE_1(u8);
     impl Debug;
     u8;
@@ -5396,6 +5760,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__INITIAL_PHASE_VALUE_REF_1(u8);
     impl Debug;
     u8;
@@ -5404,6 +5769,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__FORCE_UP_IN(u8);
     impl Debug;
     u8;
@@ -5412,6 +5778,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__FORCE_DN_IN(u8);
     impl Debug;
     u8;
@@ -5420,6 +5787,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATIC_UP_VALUE_1(u8);
     impl Debug;
     u8;
@@ -5428,6 +5796,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATIC_UP_VALUE_REF_1(u8);
     impl Debug;
     u8;
@@ -5436,6 +5805,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATIC_DN_VALUE_1(u8);
     impl Debug;
     u8;
@@ -5444,6 +5814,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATIC_DN_VALUE_REF_1(u8);
     impl Debug;
     u8;
@@ -5452,6 +5823,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__MONITOR_UP_DN(u8);
     impl Debug;
     u8;
@@ -5460,6 +5832,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__INVERT_UP_DN(u8);
     impl Debug;
     u8;
@@ -5468,6 +5841,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CPUMP_1(u8);
     impl Debug;
     u8;
@@ -5476,6 +5850,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CPUMP_2(u8);
     impl Debug;
     u8;
@@ -5484,6 +5859,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CPUMP_3(u8);
     impl Debug;
     u8;
@@ -5492,6 +5868,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__OSC_1(u8);
     impl Debug;
     u8;
@@ -5500,6 +5877,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__PLL_1(u8);
     impl Debug;
     u8;
@@ -5508,6 +5886,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__PLL_2(u8);
     impl Debug;
     u8;
@@ -5516,6 +5895,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REFERENCE_1(u8);
     impl Debug;
     u8;
@@ -5524,6 +5904,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REFERENCE_3(u8);
     impl Debug;
     u8;
@@ -5532,6 +5913,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REFERENCE_4(u8);
     impl Debug;
     u8;
@@ -5540,6 +5922,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REFERENCE_5(u8);
     impl Debug;
     u8;
@@ -5548,6 +5931,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REGAVDD1V2(u8);
     impl Debug;
     u8;
@@ -5556,6 +5940,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CALIB_1(u8);
     impl Debug;
     u8;
@@ -5564,6 +5949,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CALIB_2(u8);
     impl Debug;
     u8;
@@ -5572,6 +5958,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CALIB_3(u8);
     impl Debug;
     u8;
@@ -5580,6 +5967,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TST_MUX_SEL1(u8);
     impl Debug;
     u8;
@@ -5588,6 +5976,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TST_MUX_SEL2(u8);
     impl Debug;
     u8;
@@ -5596,6 +5985,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TST_MUX(u8);
     impl Debug;
     u8;
@@ -5604,6 +5994,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__GPIO_OUT_TESTMUX(u8);
     impl Debug;
     u8;
@@ -5612,6 +6003,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CUSTOM_FE(u8);
     impl Debug;
     u8;
@@ -5620,6 +6012,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CUSTOM_FE_2(u8);
     impl Debug;
     u8;
@@ -5628,6 +6021,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_READOUT(u8);
     impl Debug;
     u8;
@@ -5636,6 +6030,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_READOUT_1(u8);
     impl Debug;
     u8;
@@ -5644,6 +6039,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_READOUT_2(u8);
     impl Debug;
     u8;
@@ -5652,6 +6048,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_PS(u8);
     impl Debug;
     u8;
@@ -5660,6 +6057,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__LASER_SAFETY_2(u8);
     impl Debug;
     u8;
@@ -5668,6 +6066,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__MODE(u8);
     impl Debug;
     u8;
@@ -5676,6 +6075,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__PDN(u8);
     impl Debug;
     u8;
@@ -5684,6 +6084,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__PROGN(u8);
     impl Debug;
     u8;
@@ -5692,6 +6093,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__READN(u8);
     impl Debug;
     u8;
@@ -5700,6 +6102,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__PULSE_WIDTH_MSB(u8);
     impl Debug;
     u8;
@@ -5708,6 +6111,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__PULSE_WIDTH_LSB(u8);
     impl Debug;
     u8;
@@ -5716,6 +6120,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__HV_RISE_MSB(u8);
     impl Debug;
     u8;
@@ -5724,6 +6129,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__HV_RISE_LSB(u8);
     impl Debug;
     u8;
@@ -5732,6 +6138,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__HV_FALL_MSB(u8);
     impl Debug;
     u8;
@@ -5740,6 +6147,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__HV_FALL_LSB(u8);
     impl Debug;
     u8;
@@ -5748,6 +6156,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__TST(u8);
     impl Debug;
     u8;
@@ -5756,6 +6165,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__TESTREAD(u8);
     impl Debug;
     u8;
@@ -5764,6 +6174,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAIN_MMM(u8);
     impl Debug;
     u8;
@@ -5772,6 +6183,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAIN_LMM(u8);
     impl Debug;
     u8;
@@ -5780,6 +6192,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAIN_LLM(u8);
     impl Debug;
     u8;
@@ -5788,6 +6201,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAIN_LLL(u8);
     impl Debug;
     u8;
@@ -5796,6 +6210,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAOUT_MMM(u8);
     impl Debug;
     u8;
@@ -5804,6 +6219,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAOUT_LMM(u8);
     impl Debug;
     u8;
@@ -5812,6 +6228,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAOUT_LLM(u8);
     impl Debug;
     u8;
@@ -5820,6 +6237,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAOUT_LLL(u8);
     impl Debug;
     u8;
@@ -5828,6 +6246,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__ADDR(u8);
     impl Debug;
     u8;
@@ -5836,6 +6255,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__NVM_CTRL__DATAOUT_ECC(u8);
     impl Debug;
     u8;
@@ -5844,6 +6264,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_0(u8);
     impl Debug;
     u8;
@@ -5852,6 +6273,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_1(u8);
     impl Debug;
     u8;
@@ -5860,6 +6282,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_2(u8);
     impl Debug;
     u8;
@@ -5868,6 +6291,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_3(u8);
     impl Debug;
     u8;
@@ -5876,6 +6300,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_4(u8);
     impl Debug;
     u8;
@@ -5884,6 +6309,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_5(u8);
     impl Debug;
     u8;
@@ -5892,6 +6318,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_6(u8);
     impl Debug;
     u8;
@@ -5900,6 +6327,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_7(u8);
     impl Debug;
     u8;
@@ -5908,6 +6336,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_8(u8);
     impl Debug;
     u8;
@@ -5916,6 +6345,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_9(u8);
     impl Debug;
     u8;
@@ -5924,6 +6354,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_10(u8);
     impl Debug;
     u8;
@@ -5932,6 +6363,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_11(u8);
     impl Debug;
     u8;
@@ -5940,6 +6372,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_12(u8);
     impl Debug;
     u8;
@@ -5948,6 +6381,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_13(u8);
     impl Debug;
     u8;
@@ -5956,6 +6390,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_14(u8);
     impl Debug;
     u8;
@@ -5964,6 +6399,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_15(u8);
     impl Debug;
     u8;
@@ -5972,6 +6408,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_16(u8);
     impl Debug;
     u8;
@@ -5980,6 +6417,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_17(u8);
     impl Debug;
     u8;
@@ -5988,6 +6426,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_SHIFT_EN(u8);
     impl Debug;
     u8;
@@ -5996,6 +6435,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_DISABLE_CTRL(u8);
     impl Debug;
     u8;
@@ -6004,6 +6444,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_EN_SHIFT_OUT_DEBUG(u8);
     impl Debug;
     u8;
@@ -6012,6 +6453,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPI_MODE(u8);
     impl Debug;
     u8;
@@ -6020,6 +6462,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__GPIO_DIR(u8);
     impl Debug;
     u8;
@@ -6028,6 +6471,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_PERIOD(u8);
     impl Debug;
     u8;
@@ -6036,6 +6480,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_START(u8);
     impl Debug;
     u8;
@@ -6044,6 +6489,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_STOP(u8);
     impl Debug;
     u8;
@@ -6052,6 +6498,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_1(u8);
     impl Debug;
     u8;
@@ -6060,6 +6507,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_STATUS(u8);
     impl Debug;
     u8;
@@ -6068,6 +6516,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATUS(u8);
     impl Debug;
     u8;
@@ -6076,6 +6525,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__LASER_CONTINUITY_STATE(u8);
     impl Debug;
     u8;
@@ -6084,6 +6534,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_1_MMM(u8);
     impl Debug;
     u8;
@@ -6092,6 +6543,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_1_LMM(u8);
     impl Debug;
     u8;
@@ -6100,6 +6552,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_1_LLM(u8);
     impl Debug;
     u8;
@@ -6108,6 +6561,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_1_LLL(u8);
     impl Debug;
     u8;
@@ -6116,6 +6570,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_REF_1_MMM(u8);
     impl Debug;
     u8;
@@ -6124,6 +6579,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_REF_1_LMM(u8);
     impl Debug;
     u8;
@@ -6132,6 +6588,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_REF_1_LLM(u8);
     impl Debug;
     u8;
@@ -6140,6 +6597,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGE_REF_1_LLL(u8);
     impl Debug;
     u8;
@@ -6148,6 +6606,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_1_MMM(u8);
     impl Debug;
     u8;
@@ -6156,6 +6615,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_1_LMM(u8);
     impl Debug;
     u8;
@@ -6164,6 +6624,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_1_LLM(u8);
     impl Debug;
     u8;
@@ -6172,6 +6633,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_1_LLL(u8);
     impl Debug;
     u8;
@@ -6180,6 +6642,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_1_MMM(u8);
     impl Debug;
     u8;
@@ -6188,6 +6651,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_1_LMM(u8);
     impl Debug;
     u8;
@@ -6196,6 +6660,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_1_LLM(u8);
     impl Debug;
     u8;
@@ -6204,6 +6669,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_1_LLL(u8);
     impl Debug;
     u8;
@@ -6212,6 +6678,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_1_MMM(u8);
     impl Debug;
     u8;
@@ -6220,6 +6687,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_1_LMM(u8);
     impl Debug;
     u8;
@@ -6228,6 +6696,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_1_LLM(u8);
     impl Debug;
     u8;
@@ -6236,6 +6705,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_1_LLL(u8);
     impl Debug;
     u8;
@@ -6244,6 +6714,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TOTAL_PERIODS_ELAPSED_1_MM(u8);
     impl Debug;
     u8;
@@ -6252,6 +6723,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TOTAL_PERIODS_ELAPSED_1_LM(u8);
     impl Debug;
     u8;
@@ -6260,6 +6732,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TOTAL_PERIODS_ELAPSED_1_LL(u8);
     impl Debug;
     u8;
@@ -6268,6 +6741,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_MISMATCH_MM(u8);
     impl Debug;
     u8;
@@ -6276,6 +6750,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_MISMATCH_LM(u8);
     impl Debug;
     u8;
@@ -6284,6 +6759,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_MISMATCH_LL(u8);
     impl Debug;
     u8;
@@ -6292,6 +6768,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_REF_1_MMM(u8);
     impl Debug;
     u8;
@@ -6300,6 +6777,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_REF_1_LMM(u8);
     impl Debug;
     u8;
@@ -6308,6 +6786,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_REF_1_LLM(u8);
     impl Debug;
     u8;
@@ -6316,6 +6795,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_WINDOW_EVENTS_REF_1_LLL(u8);
     impl Debug;
     u8;
@@ -6324,6 +6804,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_REF_1_MMM(u8);
     impl Debug;
     u8;
@@ -6332,6 +6813,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_REF_1_LMM(u8);
     impl Debug;
     u8;
@@ -6340,6 +6822,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_REF_1_LLM(u8);
     impl Debug;
     u8;
@@ -6348,6 +6831,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RANGING_TOTAL_EVENTS_REF_1_LLL(u8);
     impl Debug;
     u8;
@@ -6356,6 +6840,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_REF_1_MMM(u8);
     impl Debug;
     u8;
@@ -6364,6 +6849,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_REF_1_LMM(u8);
     impl Debug;
     u8;
@@ -6372,6 +6858,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_REF_1_LLM(u8);
     impl Debug;
     u8;
@@ -6380,6 +6867,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SIGNAL_TOTAL_EVENTS_REF_1_LLL(u8);
     impl Debug;
     u8;
@@ -6388,6 +6876,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TOTAL_PERIODS_ELAPSED_REF_1_MM(u8);
     impl Debug;
     u8;
@@ -6396,6 +6885,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TOTAL_PERIODS_ELAPSED_REF_1_LM(u8);
     impl Debug;
     u8;
@@ -6404,6 +6894,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TOTAL_PERIODS_ELAPSED_REF_1_LL(u8);
     impl Debug;
     u8;
@@ -6412,6 +6903,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_MISMATCH_REF_MM(u8);
     impl Debug;
     u8;
@@ -6420,6 +6912,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_MISMATCH_REF_LM(u8);
     impl Debug;
     u8;
@@ -6428,6 +6921,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__AMBIENT_MISMATCH_REF_LL(u8);
     impl Debug;
     u8;
@@ -6436,6 +6930,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__GPIO_CONFIG__A0(u8);
     impl Debug;
     u8;
@@ -6444,6 +6939,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RESET_CONTROL__A0(u8);
     impl Debug;
     u8;
@@ -6452,6 +6948,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__INTR_MANAGER__A0(u8);
     impl Debug;
     u8;
@@ -6460,6 +6957,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__POWER_FSM_TIME_OSC__A0(u8);
     impl Debug;
     u8;
@@ -6468,6 +6966,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_ATEST__A0(u8);
     impl Debug;
     u8;
@@ -6476,6 +6975,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_PERIOD_CLIPPED__A0(u8);
     impl Debug;
     u8;
@@ -6484,6 +6984,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_STOP_CLIPPED__A0(u8);
     impl Debug;
     u8;
@@ -6492,6 +6993,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CALIB_2__A0(u8);
     impl Debug;
     u8;
@@ -6500,6 +7002,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STOP_CONDITION__A0(u8);
     impl Debug;
     u8;
@@ -6508,6 +7011,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__STATUS_RESET__A0(u8);
     impl Debug;
     u8;
@@ -6516,6 +7020,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__READOUT_CFG__A0(u8);
     impl Debug;
     u8;
@@ -6524,6 +7029,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__WINDOW_SETTING__A0(u8);
     impl Debug;
     u8;
@@ -6532,6 +7038,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_DELAY__A0(u8);
     impl Debug;
     u8;
@@ -6540,6 +7047,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REFERENCE_2__A0(u8);
     impl Debug;
     u8;
@@ -6548,6 +7056,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REGAVDD1V2__A0(u8);
     impl Debug;
     u8;
@@ -6556,6 +7065,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__TST_MUX__A0(u8);
     impl Debug;
     u8;
@@ -6564,6 +7074,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CUSTOM_FE_2__A0(u8);
     impl Debug;
     u8;
@@ -6572,6 +7083,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPAD_READOUT__A0(u8);
     impl Debug;
     u8;
@@ -6580,6 +7092,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__CPUMP_1__A0(u8);
     impl Debug;
     u8;
@@ -6588,6 +7101,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__SPARE_REGISTER__A0(u8);
     impl Debug;
     u8;
@@ -6596,6 +7110,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__VCSEL_CONT_STAGE5_BYPASS__A0(u8);
     impl Debug;
     u8;
@@ -6604,6 +7119,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_18(u8);
     impl Debug;
     u8;
@@ -6612,6 +7128,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_19(u8);
     impl Debug;
     u8;
@@ -6620,6 +7137,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_20(u8);
     impl Debug;
     u8;
@@ -6628,6 +7146,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_21(u8);
     impl Debug;
     u8;
@@ -6636,6 +7155,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_22(u8);
     impl Debug;
     u8;
@@ -6644,6 +7164,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_23(u8);
     impl Debug;
     u8;
@@ -6652,6 +7173,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_24(u8);
     impl Debug;
     u8;
@@ -6660,6 +7182,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_25(u8);
     impl Debug;
     u8;
@@ -6668,6 +7191,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_26(u8);
     impl Debug;
     u8;
@@ -6676,6 +7200,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_27(u8);
     impl Debug;
     u8;
@@ -6684,6 +7209,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_28(u8);
     impl Debug;
     u8;
@@ -6692,6 +7218,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_29(u8);
     impl Debug;
     u8;
@@ -6700,6 +7227,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_30(u8);
     impl Debug;
     u8;
@@ -6708,6 +7236,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__RET_SPAD_EN_31(u8);
     impl Debug;
     u8;
@@ -6716,6 +7245,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_SPAD_EN_0__EWOK(u8);
     impl Debug;
     u8;
@@ -6724,6 +7254,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_SPAD_EN_1__EWOK(u8);
     impl Debug;
     u8;
@@ -6732,6 +7263,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_SPAD_EN_2__EWOK(u8);
     impl Debug;
     u8;
@@ -6740,6 +7272,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_SPAD_EN_3__EWOK(u8);
     impl Debug;
     u8;
@@ -6748,6 +7281,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_SPAD_EN_4__EWOK(u8);
     impl Debug;
     u8;
@@ -6756,6 +7290,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_SPAD_EN_5__EWOK(u8);
     impl Debug;
     u8;
@@ -6764,6 +7299,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REF_EN_START_SELECT(u8);
     impl Debug;
     u8;
@@ -6772,6 +7308,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGING_CORE__REGDVDD1V2_ATEST__EWOK(u8);
     impl Debug;
     u8;
@@ -6780,6 +7317,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SOFT_RESET_GO1(u8);
     impl Debug;
     u8;
@@ -6788,6 +7326,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PRIVATE__PATCH_BASE_ADDR_RSLV(u8);
     impl Debug;
     u8;
@@ -6841,6 +7380,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6849,6 +7389,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -6865,6 +7406,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6873,6 +7415,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -6889,6 +7432,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6897,6 +7441,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -6913,6 +7458,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SIGMA_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6921,6 +7467,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SIGMA_SD0_LO(u8);
     impl Debug;
     u8;
@@ -6937,6 +7484,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PHASE_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6945,6 +7493,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PHASE_SD0_LO(u8);
     impl Debug;
     u8;
@@ -6961,6 +7510,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6969,6 +7519,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(u8);
     impl Debug;
     u8;
@@ -6985,6 +7536,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -6993,6 +7545,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -7009,6 +7562,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -7017,6 +7571,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -7033,6 +7588,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -7041,6 +7597,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -7057,6 +7614,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -7065,6 +7623,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -7081,6 +7640,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7089,6 +7649,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7105,6 +7666,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7113,6 +7675,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7129,6 +7692,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7137,6 +7701,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7153,6 +7718,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SIGMA_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7161,6 +7727,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SIGMA_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7177,6 +7744,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PHASE_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7185,6 +7753,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__PHASE_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7201,6 +7770,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7209,6 +7779,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7225,6 +7796,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_0_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7233,6 +7805,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_0_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7249,6 +7822,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_1_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7257,6 +7831,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_1_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7273,6 +7848,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_2_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7281,6 +7857,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_2_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7297,6 +7874,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_3_SD1_HI(u8);
     impl Debug;
     u8;
@@ -7305,6 +7883,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT__SPARE_3_SD1_LO(u8);
     impl Debug;
     u8;
@@ -7321,6 +7900,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -7329,6 +7909,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -7337,6 +7918,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -7345,6 +7927,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -7361,6 +7944,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -7369,6 +7953,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -7377,6 +7962,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -7385,6 +7971,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -7401,6 +7988,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -7409,6 +7997,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -7417,6 +8006,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -7425,6 +8015,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -7441,6 +8032,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(u8);
     impl Debug;
     u8;
@@ -7449,6 +8041,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(u8);
     impl Debug;
     u8;
@@ -7457,6 +8050,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(u8);
     impl Debug;
     u8;
@@ -7465,6 +8059,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(u8);
     impl Debug;
     u8;
@@ -7481,6 +8076,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -7489,6 +8085,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -7497,6 +8094,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -7505,6 +8103,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -7521,6 +8120,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -7529,6 +8129,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -7537,6 +8138,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -7545,6 +8147,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -7561,6 +8164,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -7569,6 +8173,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -7577,6 +8182,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -7585,6 +8191,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -7601,6 +8208,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(u8);
     impl Debug;
     u8;
@@ -7609,6 +8217,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(u8);
     impl Debug;
     u8;
@@ -7617,6 +8226,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(u8);
     impl Debug;
     u8;
@@ -7625,6 +8235,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(u8);
     impl Debug;
     u8;
@@ -7665,6 +8276,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_RATE_HIGH_HI(u8);
     impl Debug;
     u8;
@@ -7673,6 +8285,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_RATE_HIGH_LO(u8);
     impl Debug;
     u8;
@@ -7689,6 +8302,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_RATE_LOW_HI(u8);
     impl Debug;
     u8;
@@ -7697,6 +8311,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__SYSTEM__THRESH_RATE_LOW_LO(u8);
     impl Debug;
     u8;
@@ -7735,6 +8350,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_HI(u8);
     impl Debug;
     u8;
@@ -7743,6 +8359,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_LO(u8);
     impl Debug;
     u8;
@@ -7863,6 +8480,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__RANGE_CONFIG__SIGMA_THRESH_HI(u8);
     impl Debug;
     u8;
@@ -7871,6 +8489,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__RANGE_CONFIG__SIGMA_THRESH_LO(u8);
     impl Debug;
     u8;
@@ -7887,6 +8506,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -7895,6 +8515,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -8304,6 +8925,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct VHV_RESULT__PEAK_SIGNAL_RATE_MCPS_HI(u8);
     impl Debug;
     u8;
@@ -8312,6 +8934,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct VHV_RESULT__PEAK_SIGNAL_RATE_MCPS_LO(u8);
     impl Debug;
     u8;
@@ -8328,6 +8951,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct VHV_RESULT__SIGNAL_TOTAL_EVENTS_REF_3(u8);
     impl Debug;
     u8;
@@ -8336,6 +8960,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct VHV_RESULT__SIGNAL_TOTAL_EVENTS_REF_2(u8);
     impl Debug;
     u8;
@@ -8344,6 +8969,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct VHV_RESULT__SIGNAL_TOTAL_EVENTS_REF_1(u8);
     impl Debug;
     u8;
@@ -8352,6 +8978,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct VHV_RESULT__SIGNAL_TOTAL_EVENTS_REF_0(u8);
     impl Debug;
     u8;
@@ -8368,6 +8995,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PHASECAL_RESULT__PHASE_OUTPUT_REF_HI(u8);
     impl Debug;
     u8;
@@ -8376,6 +9004,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct PHASECAL_RESULT__PHASE_OUTPUT_REF_LO(u8);
     impl Debug;
     u8;
@@ -8392,6 +9021,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_RESULT__TOTAL_RATE_PER_SPAD_HI(u8);
     impl Debug;
     u8;
@@ -8400,6 +9030,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_RESULT__TOTAL_RATE_PER_SPAD_LO(u8);
     impl Debug;
     u8;
@@ -8424,6 +9055,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_RESULT__NUM_REQUESTED_SPADS_HI(u8);
     impl Debug;
     u8;
@@ -8432,6 +9064,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct DSS_RESULT__NUM_REQUESTED_SPADS_LO(u8);
     impl Debug;
     u8;
@@ -8448,6 +9081,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_RESULT__INNER_INTERSECTION_RATE_HI(u8);
     impl Debug;
     u8;
@@ -8456,6 +9090,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_RESULT__INNER_INTERSECTION_RATE_LO(u8);
     impl Debug;
     u8;
@@ -8472,6 +9107,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_RESULT__OUTER_COMPLEMENT_RATE_HI(u8);
     impl Debug;
     u8;
@@ -8480,6 +9116,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_RESULT__OUTER_COMPLEMENT_RATE_LO(u8);
     impl Debug;
     u8;
@@ -8496,6 +9133,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_RESULT__TOTAL_OFFSET_HI(u8);
     impl Debug;
     u8;
@@ -8504,6 +9142,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct MM_RESULT__TOTAL_OFFSET_LO(u8);
     impl Debug;
     u8;
@@ -8520,6 +9159,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_CALC__XTALK_FOR_ENABLED_SPADS_3(u8);
     impl Debug;
     u8;
@@ -8528,6 +9168,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_CALC__XTALK_FOR_ENABLED_SPADS_2(u8);
     impl Debug;
     u8;
@@ -8536,6 +9177,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_CALC__XTALK_FOR_ENABLED_SPADS_1(u8);
     impl Debug;
     u8;
@@ -8544,6 +9186,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_CALC__XTALK_FOR_ENABLED_SPADS_0(u8);
     impl Debug;
     u8;
@@ -8560,6 +9203,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_USER_ROI_KCPS_3(u8);
     impl Debug;
     u8;
@@ -8568,6 +9212,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_USER_ROI_KCPS_2(u8);
     impl Debug;
     u8;
@@ -8576,6 +9221,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_USER_ROI_KCPS_1(u8);
     impl Debug;
     u8;
@@ -8584,6 +9230,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_USER_ROI_KCPS_0(u8);
     impl Debug;
     u8;
@@ -8600,6 +9247,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_INNER_ROI_KCPS_3(u8);
     impl Debug;
     u8;
@@ -8608,6 +9256,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_INNER_ROI_KCPS_2(u8);
     impl Debug;
     u8;
@@ -8616,6 +9265,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_INNER_ROI_KCPS_1(u8);
     impl Debug;
     u8;
@@ -8624,6 +9274,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_INNER_ROI_KCPS_0(u8);
     impl Debug;
     u8;
@@ -8640,6 +9291,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_OUTER_ROI_KCPS_3(u8);
     impl Debug;
     u8;
@@ -8648,6 +9300,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_OUTER_ROI_KCPS_2(u8);
     impl Debug;
     u8;
@@ -8656,6 +9309,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_OUTER_ROI_KCPS_1(u8);
     impl Debug;
     u8;
@@ -8664,6 +9318,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct XTALK_RESULT__AVG_XTALK_MM_OUTER_ROI_KCPS_0(u8);
     impl Debug;
     u8;
@@ -8680,6 +9335,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_RESULT__ACCUM_PHASE_3(u8);
     impl Debug;
     u8;
@@ -8688,6 +9344,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_RESULT__ACCUM_PHASE_2(u8);
     impl Debug;
     u8;
@@ -8696,6 +9353,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_RESULT__ACCUM_PHASE_1(u8);
     impl Debug;
     u8;
@@ -8704,6 +9362,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_RESULT__ACCUM_PHASE_0(u8);
     impl Debug;
     u8;
@@ -8720,6 +9379,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_RESULT__OFFSET_CORRECTED_RANGE_HI(u8);
     impl Debug;
     u8;
@@ -8728,6 +9388,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct RANGE_RESULT__OFFSET_CORRECTED_RANGE_LO(u8);
     impl Debug;
     u8;
@@ -8789,6 +9450,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8797,6 +9459,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8813,6 +9476,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8821,6 +9485,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8837,6 +9502,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8845,6 +9511,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8861,6 +9528,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SIGMA_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8869,6 +9537,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SIGMA_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8885,6 +9554,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PHASE_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8893,6 +9563,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PHASE_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8909,6 +9580,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8917,6 +9589,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8933,6 +9606,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8941,6 +9615,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8957,6 +9632,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8965,6 +9641,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -8981,6 +9658,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -8989,6 +9667,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -9005,6 +9684,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(u8);
     impl Debug;
     u8;
@@ -9013,6 +9693,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(u8);
     impl Debug;
     u8;
@@ -9029,6 +9710,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9037,6 +9719,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9053,6 +9736,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9061,6 +9745,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9077,6 +9762,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9085,6 +9771,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9101,6 +9788,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SIGMA_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9109,6 +9797,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SIGMA_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9125,6 +9814,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PHASE_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9133,6 +9823,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__PHASE_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9149,6 +9840,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9157,6 +9849,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9173,6 +9866,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SPARE_0_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9181,6 +9875,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SPARE_0_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9197,6 +9892,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SPARE_1_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9205,6 +9901,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SPARE_1_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9221,6 +9918,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SPARE_2_SD1_HI(u8);
     impl Debug;
     u8;
@@ -9229,6 +9927,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT__SPARE_2_SD1_LO(u8);
     impl Debug;
     u8;
@@ -9262,6 +9961,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -9270,6 +9970,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -9278,6 +9979,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -9286,6 +9988,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -9302,6 +10005,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -9310,6 +10014,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -9318,6 +10023,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -9326,6 +10032,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -9342,6 +10049,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3(u8);
     impl Debug;
     u8;
@@ -9350,6 +10058,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2(u8);
     impl Debug;
     u8;
@@ -9358,6 +10067,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1(u8);
     impl Debug;
     u8;
@@ -9366,6 +10076,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0(u8);
     impl Debug;
     u8;
@@ -9382,6 +10093,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(u8);
     impl Debug;
     u8;
@@ -9390,6 +10102,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(u8);
     impl Debug;
     u8;
@@ -9398,6 +10111,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(u8);
     impl Debug;
     u8;
@@ -9406,6 +10120,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(u8);
     impl Debug;
     u8;
@@ -9422,6 +10137,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -9430,6 +10146,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -9438,6 +10155,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -9446,6 +10164,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -9462,6 +10181,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -9470,6 +10190,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -9478,6 +10199,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -9486,6 +10208,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -9502,6 +10225,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3(u8);
     impl Debug;
     u8;
@@ -9510,6 +10234,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2(u8);
     impl Debug;
     u8;
@@ -9518,6 +10243,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1(u8);
     impl Debug;
     u8;
@@ -9526,6 +10252,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0(u8);
     impl Debug;
     u8;
@@ -9542,6 +10269,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(u8);
     impl Debug;
     u8;
@@ -9550,6 +10278,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(u8);
     impl Debug;
     u8;
@@ -9558,6 +10287,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(u8);
     impl Debug;
     u8;
@@ -9566,6 +10296,7 @@ bitfield! {
 
 bitfield! {
     #[derive(Clone, Copy, Eq, Hash, PartialEq)]
+    #[derive(Default)]
     pub struct SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(u8);
     impl Debug;
     u8;
@@ -10618,14 +11349,30 @@ pub enum State {
     REF_SPAD_MAN__NUM_REQUESTED_REF_SPADS(REF_SPAD_MAN__NUM_REQUESTED_REF_SPADS),
     REF_SPAD_MAN__REF_LOCATION(REF_SPAD_MAN__REF_LOCATION),
     ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS(ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS),
-    ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_HI(ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_HI),
-    ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_LO(ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_LO),
-    ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS(ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS),
-    ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_HI(ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_HI),
-    ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_LO(ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_LO),
-    ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS(ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS),
-    ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_HI(ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_HI),
-    ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_LO(ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_LO),
+    ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_HI(
+        ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_HI,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_LO(
+        ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS_LO,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS(
+        ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_HI(
+        ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_HI,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_LO(
+        ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS_LO,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS(
+        ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_HI(
+        ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_HI,
+    ),
+    ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_LO(
+        ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS_LO,
+    ),
     REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS(REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS),
     REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS_HI(REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS_HI),
     REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS_LO(REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS_LO),
@@ -10766,11 +11513,21 @@ pub enum State {
     RESULT__PHASE_SD0_HI(RESULT__PHASE_SD0_HI),
     RESULT__PHASE_SD0_LO(RESULT__PHASE_SD0_LO),
     RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0(RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0),
-    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI),
-    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO),
-    RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0(RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0),
-    RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI),
-    RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO),
+    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(
+        RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI,
+    ),
+    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(
+        RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO,
+    ),
+    RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0(
+        RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0,
+    ),
+    RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(
+        RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI,
+    ),
+    RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(
+        RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO,
+    ),
     RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0(RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0),
     RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
     RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
@@ -10796,8 +11553,12 @@ pub enum State {
     RESULT__PHASE_SD1_HI(RESULT__PHASE_SD1_HI),
     RESULT__PHASE_SD1_LO(RESULT__PHASE_SD1_LO),
     RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1(RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1),
-    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI),
-    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO),
+    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(
+        RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI,
+    ),
+    RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(
+        RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO,
+    ),
     RESULT__SPARE_0_SD1(RESULT__SPARE_0_SD1),
     RESULT__SPARE_0_SD1_HI(RESULT__SPARE_0_SD1_HI),
     RESULT__SPARE_0_SD1_LO(RESULT__SPARE_0_SD1_LO),
@@ -10889,7 +11650,9 @@ pub enum State {
     GPH__SD_CONFIG__FIRST_ORDER_SELECT(GPH__SD_CONFIG__FIRST_ORDER_SELECT),
     GPH__SD_CONFIG__QUANTIFIER(GPH__SD_CONFIG__QUANTIFIER),
     GPH__ROI_CONFIG__USER_ROI_CENTRE_SPAD(GPH__ROI_CONFIG__USER_ROI_CENTRE_SPAD),
-    GPH__ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE(GPH__ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE),
+    GPH__ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE(
+        GPH__ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE,
+    ),
     GPH__SYSTEM__SEQUENCE_CONFIG(GPH__SYSTEM__SEQUENCE_CONFIG),
     GPH__GPH_ID(GPH__GPH_ID),
     SYSTEM__INTERRUPT_SET(SYSTEM__INTERRUPT_SET),
@@ -11083,9 +11846,15 @@ pub enum State {
     MCU_RANGE_CALC__XTALK_LO(MCU_RANGE_CALC__XTALK_LO),
     MCU_RANGE_CALC__CALC_STATUS(MCU_RANGE_CALC__CALC_STATUS),
     MCU_RANGE_CALC__DEBUG(MCU_RANGE_CALC__DEBUG),
-    MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS(MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS),
-    MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_HI(MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_HI),
-    MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_LO(MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_LO),
+    MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS(
+        MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS,
+    ),
+    MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_HI(
+        MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_HI,
+    ),
+    MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_LO(
+        MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS_LO,
+    ),
     MCU_RANGE_CALC__SPARE_0(MCU_RANGE_CALC__SPARE_0),
     MCU_RANGE_CALC__SPARE_1(MCU_RANGE_CALC__SPARE_1),
     MCU_RANGE_CALC__SPARE_2(MCU_RANGE_CALC__SPARE_2),
@@ -11433,54 +12202,126 @@ pub enum State {
     PREV_SHADOW_RESULT__RANGE_STATUS(PREV_SHADOW_RESULT__RANGE_STATUS),
     PREV_SHADOW_RESULT__REPORT_STATUS(PREV_SHADOW_RESULT__REPORT_STATUS),
     PREV_SHADOW_RESULT__STREAM_COUNT(PREV_SHADOW_RESULT__STREAM_COUNT),
-    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0(PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0),
-    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
-    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO),
-    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0(PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0),
-    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI(PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI),
-    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO(PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO),
+    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0(
+        PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0,
+    ),
+    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(
+        PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(
+        PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0(
+        PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0,
+    ),
+    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI(
+        PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO(
+        PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO,
+    ),
     PREV_SHADOW_RESULT__SIGMA_SD0(PREV_SHADOW_RESULT__SIGMA_SD0),
     PREV_SHADOW_RESULT__SIGMA_SD0_HI(PREV_SHADOW_RESULT__SIGMA_SD0_HI),
     PREV_SHADOW_RESULT__SIGMA_SD0_LO(PREV_SHADOW_RESULT__SIGMA_SD0_LO),
     PREV_SHADOW_RESULT__PHASE_SD0(PREV_SHADOW_RESULT__PHASE_SD0),
     PREV_SHADOW_RESULT__PHASE_SD0_HI(PREV_SHADOW_RESULT__PHASE_SD0_HI),
     PREV_SHADOW_RESULT__PHASE_SD0_LO(PREV_SHADOW_RESULT__PHASE_SD0_LO),
-    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0(PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0),
-    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI),
-    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO),
-    PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0(PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0),
-    PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
-    PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
-    PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0(PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0),
-    PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
-    PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
-    PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0(PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0),
-    PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI),
-    PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO),
-    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1(PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1),
-    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI),
-    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI),
-    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO),
-    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1(PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1),
-    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI(PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI),
-    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO(PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO),
+    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0(
+        PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0,
+    ),
+    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(
+        PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(
+        PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0(
+        PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0,
+    ),
+    PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(
+        PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(
+        PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0(
+        PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0,
+    ),
+    PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(
+        PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(
+        PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0(
+        PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0,
+    ),
+    PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(
+        PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI,
+    ),
+    PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(
+        PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO,
+    ),
+    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1(
+        PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1,
+    ),
+    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(
+        PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI,
+    ),
+    PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(
+        PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI,
+    ),
+    PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(
+        PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO,
+    ),
+    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1(
+        PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1,
+    ),
+    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI(
+        PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI,
+    ),
+    PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO(
+        PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO,
+    ),
     PREV_SHADOW_RESULT__SIGMA_SD1(PREV_SHADOW_RESULT__SIGMA_SD1),
     PREV_SHADOW_RESULT__SIGMA_SD1_HI(PREV_SHADOW_RESULT__SIGMA_SD1_HI),
     PREV_SHADOW_RESULT__SIGMA_SD1_LO(PREV_SHADOW_RESULT__SIGMA_SD1_LO),
     PREV_SHADOW_RESULT__PHASE_SD1(PREV_SHADOW_RESULT__PHASE_SD1),
     PREV_SHADOW_RESULT__PHASE_SD1_HI(PREV_SHADOW_RESULT__PHASE_SD1_HI),
     PREV_SHADOW_RESULT__PHASE_SD1_LO(PREV_SHADOW_RESULT__PHASE_SD1_LO),
-    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1(PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1),
-    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI),
-    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO),
+    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1(
+        PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1,
+    ),
+    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(
+        PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI,
+    ),
+    PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(
+        PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO,
+    ),
     PREV_SHADOW_RESULT__SPARE_0_SD1(PREV_SHADOW_RESULT__SPARE_0_SD1),
     PREV_SHADOW_RESULT__SPARE_0_SD1_HI(PREV_SHADOW_RESULT__SPARE_0_SD1_HI),
     PREV_SHADOW_RESULT__SPARE_0_SD1_LO(PREV_SHADOW_RESULT__SPARE_0_SD1_LO),
@@ -11493,46 +12334,126 @@ pub enum State {
     PREV_SHADOW_RESULT__SPARE_3_SD1(PREV_SHADOW_RESULT__SPARE_3_SD1),
     PREV_SHADOW_RESULT__SPARE_3_SD1_HI(PREV_SHADOW_RESULT__SPARE_3_SD1_HI),
     PREV_SHADOW_RESULT__SPARE_3_SD1_LO(PREV_SHADOW_RESULT__SPARE_3_SD1_LO),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1),
-    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1),
-    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0(PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1),
-    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0(PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1),
-    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(
+        PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0(
+        PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0(
+        PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1,
+    ),
+    PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(
+        PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0,
+    ),
     PREV_SHADOW_RESULT_CORE__SPARE_0(PREV_SHADOW_RESULT_CORE__SPARE_0),
     RESULT__DEBUG_STATUS(RESULT__DEBUG_STATUS),
     RESULT__DEBUG_STAGE(RESULT__DEBUG_STAGE),
@@ -11545,8 +12466,12 @@ pub enum State {
     GPH__SYSTEM__INTERRUPT_CONFIG_GPIO(GPH__SYSTEM__INTERRUPT_CONFIG_GPIO),
     GPH__DSS_CONFIG__ROI_MODE_CONTROL(GPH__DSS_CONFIG__ROI_MODE_CONTROL),
     GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT(GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT),
-    GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_HI(GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_HI),
-    GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_LO(GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_LO),
+    GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_HI(
+        GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_HI,
+    ),
+    GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_LO(
+        GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT_LO,
+    ),
     GPH__DSS_CONFIG__MANUAL_BLOCK_SELECT(GPH__DSS_CONFIG__MANUAL_BLOCK_SELECT),
     GPH__DSS_CONFIG__MAX_SPADS_LIMIT(GPH__DSS_CONFIG__MAX_SPADS_LIMIT),
     GPH__DSS_CONFIG__MIN_SPADS_LIMIT(GPH__DSS_CONFIG__MIN_SPADS_LIMIT),
@@ -11563,9 +12488,15 @@ pub enum State {
     GPH__RANGE_CONFIG__SIGMA_THRESH(GPH__RANGE_CONFIG__SIGMA_THRESH),
     GPH__RANGE_CONFIG__SIGMA_THRESH_HI(GPH__RANGE_CONFIG__SIGMA_THRESH_HI),
     GPH__RANGE_CONFIG__SIGMA_THRESH_LO(GPH__RANGE_CONFIG__SIGMA_THRESH_LO),
-    GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS(GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS),
-    GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_HI(GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_HI),
-    GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_LO(GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_LO),
+    GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS(
+        GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS,
+    ),
+    GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_HI(
+        GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_HI,
+    ),
+    GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_LO(
+        GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS_LO,
+    ),
     GPH__RANGE_CONFIG__VALID_PHASE_LOW(GPH__RANGE_CONFIG__VALID_PHASE_LOW),
     GPH__RANGE_CONFIG__VALID_PHASE_HIGH(GPH__RANGE_CONFIG__VALID_PHASE_HIGH),
     FIRMWARE__INTERNAL_STREAM_COUNT_DIV(FIRMWARE__INTERNAL_STREAM_COUNT_DIV),
@@ -11676,11 +12607,19 @@ pub enum State {
     SHADOW_RESULT__REPORT_STATUS(SHADOW_RESULT__REPORT_STATUS),
     SHADOW_RESULT__STREAM_COUNT(SHADOW_RESULT__STREAM_COUNT),
     SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0(SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0),
-    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
-    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
+    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI(
+        SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_HI,
+    ),
+    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO(
+        SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0_LO,
+    ),
     SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_HI,
+    ),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0_LO,
+    ),
     SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0(SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0),
     SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI(SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_HI),
     SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO(SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0_LO),
@@ -11690,27 +12629,63 @@ pub enum State {
     SHADOW_RESULT__PHASE_SD0(SHADOW_RESULT__PHASE_SD0),
     SHADOW_RESULT__PHASE_SD0_HI(SHADOW_RESULT__PHASE_SD0_HI),
     SHADOW_RESULT__PHASE_SD0_LO(SHADOW_RESULT__PHASE_SD0_LO),
-    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0(SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0),
-    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI),
-    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO),
-    SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0(SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0),
-    SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
-    SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
-    SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0(SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0),
-    SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI),
-    SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO),
+    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0(
+        SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0,
+    ),
+    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI(
+        SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_HI,
+    ),
+    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO(
+        SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO,
+    ),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0,
+    ),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI,
+    ),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO,
+    ),
+    SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0(
+        SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0,
+    ),
+    SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(
+        SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_HI,
+    ),
+    SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(
+        SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0_LO,
+    ),
+    SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0(
+        SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0,
+    ),
+    SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI(
+        SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_HI,
+    ),
+    SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO(
+        SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0_LO,
+    ),
     SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0(SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0),
-    SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI),
-    SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO),
+    SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI(
+        SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_HI,
+    ),
+    SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO(
+        SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0_LO,
+    ),
     SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1(SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1),
-    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI),
-    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO),
+    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI(
+        SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_HI,
+    ),
+    SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO(
+        SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1_LO,
+    ),
     SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI),
-    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_HI,
+    ),
+    SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO(
+        SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1_LO,
+    ),
     SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1(SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1),
     SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI(SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_HI),
     SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO(SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1_LO),
@@ -11720,9 +12695,15 @@ pub enum State {
     SHADOW_RESULT__PHASE_SD1(SHADOW_RESULT__PHASE_SD1),
     SHADOW_RESULT__PHASE_SD1_HI(SHADOW_RESULT__PHASE_SD1_HI),
     SHADOW_RESULT__PHASE_SD1_LO(SHADOW_RESULT__PHASE_SD1_LO),
-    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1(SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1),
-    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI),
-    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO),
+    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1(
+        SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1,
+    ),
+    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI(
+        SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_HI,
+    ),
+    SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO(
+        SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1_LO,
+    ),
     SHADOW_RESULT__SPARE_0_SD1(SHADOW_RESULT__SPARE_0_SD1),
     SHADOW_RESULT__SPARE_0_SD1_HI(SHADOW_RESULT__SPARE_0_SD1_HI),
     SHADOW_RESULT__SPARE_0_SD1_LO(SHADOW_RESULT__SPARE_0_SD1_LO),
@@ -11735,10 +12716,18 @@ pub enum State {
     SHADOW_RESULT__SPARE_3_SD1(SHADOW_RESULT__SPARE_3_SD1),
     SHADOW_RESULT__THRESH_INFO(SHADOW_RESULT__THRESH_INFO),
     SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_3,
+    ),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_2,
+    ),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_1,
+    ),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0_0,
+    ),
     SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0(SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0),
     SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3(SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_3),
     SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2(SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0_2),
@@ -11750,15 +12739,31 @@ pub enum State {
     SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1(SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_1),
     SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0(SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0_0),
     SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_3,
+    ),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_2,
+    ),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_1,
+    ),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0_0,
+    ),
     SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1),
-    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_3,
+    ),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_2,
+    ),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_1,
+    ),
+    SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0(
+        SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1_0,
+    ),
     SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1(SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1),
     SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3(SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_3),
     SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2(SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1_2),
@@ -11770,10 +12775,18 @@ pub enum State {
     SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1(SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_1),
     SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0(SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1_0),
     SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1),
-    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_3,
+    ),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_2,
+    ),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_1,
+    ),
+    SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0(
+        SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1_0,
+    ),
     SHADOW_RESULT_CORE__SPARE_0(SHADOW_RESULT_CORE__SPARE_0),
     SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_HI(SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_HI),
     SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_LO(SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_LO),
@@ -22908,7 +23921,8 @@ impl Entry for PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0_LO {
 }
 
 impl Entry for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0 {
-    const INDEX: Index = Index::PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0;
+    const INDEX: Index =
+        Index::PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0;
     type Array = [u8; 2];
 
     fn into_array(self) -> Self::Array {
@@ -22921,7 +23935,8 @@ impl Entry for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MC
 }
 
 impl Entry for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_HI {
-    const INDEX: Index = Index::PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0;
+    const INDEX: Index =
+        Index::PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0;
     type Array = [u8; 1];
 
     fn into_array(self) -> Self::Array {
@@ -22934,7 +23949,8 @@ impl Entry for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MC
 }
 
 impl Entry for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO {
-    const INDEX: Index = Index::PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO;
+    const INDEX: Index =
+        Index::PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO;
     type Array = [u8; 1];
 
     fn into_array(self) -> Self::Array {
@@ -26080,7 +27096,8 @@ impl Entry for SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD
 }
 
 impl Entry for SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO {
-    const INDEX: Index = Index::SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO;
+    const INDEX: Index =
+        Index::SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0_LO;
     type Array = [u8; 1];
 
     fn into_array(self) -> Self::Array {
@@ -27145,6 +28162,2579 @@ impl Entry for SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_LO {
     }
 }
 
+impl Default for I2C_SLAVE__DEVICE_ADDRESS {
+    fn default() -> Self {
+        Self(crate::settings::EWOK_I2C_DEV_ADDR_DEFAULT)
+    }
+}
+
+impl Default for ANA_CONFIG__VHV_REF_SEL_VDDPIX {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for ANA_CONFIG__VHV_REF_SEL_VQUENCH {
+    fn default() -> Self {
+        Self(16)
+    }
+}
+
+impl Default for ANA_CONFIG__REG_AVDD1V2_SEL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__FAST_OSC__TRIM {
+    fn default() -> Self {
+        Self(72)
+    }
+}
+
+impl Default for OSC_MEASURED__FAST_OSC__FREQUENCY {
+    fn default() -> Self {
+        Self(crate::settings::OSC_FREQUENCY)
+    }
+}
+
+impl Default for VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND {
+    fn default() -> Self {
+        Self(129)
+    }
+}
+
+impl Default for VHV_CONFIG__COUNT_THRESH {
+    fn default() -> Self {
+        Self(128)
+    }
+}
+
+impl Default for VHV_CONFIG__OFFSET {
+    fn default() -> Self {
+        Self(7)
+    }
+}
+
+impl Default for VHV_CONFIG__INIT {
+    fn default() -> Self {
+        Self(32)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_REF_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_REF_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_REF_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_REF_3 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_REF_4 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_REF_5 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__REF_EN_START_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for REF_SPAD_MAN__NUM_REQUESTED_REF_SPADS {
+    fn default() -> Self {
+        Self(44)
+    }
+}
+
+impl Default for REF_SPAD_MAN__REF_LOCATION {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for REF_SPAD_CHAR__TOTAL_RATE_TARGET_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__PART_TO_PART_RANGE_OFFSET_MM {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_CONFIG__INNER_OFFSET_MM {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_CONFIG__OUTER_OFFSET_MM {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CONFIG__TARGET_TOTAL_RATE_MCPS {
+    fn default() -> Self {
+        Self(896)
+    }
+}
+
+impl Default for DEBUG__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for TEST_MODE__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for CLK_GATING__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for NVM_BIST__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for NVM_BIST__NUM_NVM_WORDS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for NVM_BIST__START_ADDRESS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for HOST_IF__STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PAD_I2C_HV__CONFIG {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PAD_I2C_HV__EXTSUP_CONFIG {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPIO_HV_PAD__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPIO_HV_MUX__CTRL {
+    fn default() -> Self {
+        Self(17)
+    }
+}
+
+impl Default for GPIO__TIO_HV_STATUS {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for GPIO__FIO_HV_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__SPAD_SEL_PSWIDTH {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for ANA_CONFIG__VCSEL_PULSE_WIDTH_OFFSET {
+    fn default() -> Self {
+        Self(8)
+    }
+}
+
+impl Default for ANA_CONFIG__FAST_OSC__CONFIG_CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SIGMA_ESTIMATOR__EFFECTIVE_PULSE_WIDTH_NS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SIGMA_ESTIMATOR__EFFECTIVE_AMBIENT_WIDTH_NS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SIGMA_ESTIMATOR__SIGMA_REF_MM {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__CROSSTALK_COMPENSATION_VALID_HEIGHT_MM {
+    fn default() -> Self {
+        Self(20)
+    }
+}
+
+impl Default for SPARE_HOST_CONFIG__STATIC_CONFIG_SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SPARE_HOST_CONFIG__STATIC_CONFIG_SPARE_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__RANGE_IGNORE_THRESHOLD_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__RANGE_IGNORE_VALID_HEIGHT_MM {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ALGO__RANGE_MIN_CLIP {
+    fn default() -> Self {
+        Self(141)
+    }
+}
+
+impl Default for ALGO__CONSISTENCY_CHECK__TOLERANCE {
+    fn default() -> Self {
+        Self(8)
+    }
+}
+
+impl Default for SPARE_HOST_CONFIG__STATIC_CONFIG_SPARE_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SD_CONFIG__RESET_STAGES_MSB {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SD_CONFIG__RESET_STAGES_LSB {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH_CONFIG__STREAM_COUNT_UPDATE_VALUE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__STREAM_DIVIDER {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__INTERRUPT_CONFIG_GPIO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for CAL_CONFIG__VCSEL_START {
+    fn default() -> Self {
+        Self(11)
+    }
+}
+
+impl Default for CAL_CONFIG__REPEAT_RATE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__VCSEL_WIDTH {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for PHASECAL_CONFIG__TIMEOUT_MACROP {
+    fn default() -> Self {
+        Self(4)
+    }
+}
+
+impl Default for PHASECAL_CONFIG__TARGET {
+    fn default() -> Self {
+        Self(33)
+    }
+}
+
+impl Default for PHASECAL_CONFIG__OVERRIDE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CONFIG__ROI_MODE_CONTROL {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for SYSTEM__THRESH_RATE_HIGH {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__THRESH_RATE_LOW {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CONFIG__MANUAL_BLOCK_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CONFIG__APERTURE_ATTENUATION {
+    fn default() -> Self {
+        Self(51)
+    }
+}
+
+impl Default for DSS_CONFIG__MAX_SPADS_LIMIT {
+    fn default() -> Self {
+        Self(255)
+    }
+}
+
+impl Default for DSS_CONFIG__MIN_SPADS_LIMIT {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for MM_CONFIG__TIMEOUT_MACROP_A_HI {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_CONFIG__TIMEOUT_MACROP_A_LO {
+    fn default() -> Self {
+        Self(6)
+    }
+}
+
+impl Default for MM_CONFIG__TIMEOUT_MACROP_B_HI {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_CONFIG__TIMEOUT_MACROP_B_LO {
+    fn default() -> Self {
+        Self(6)
+    }
+}
+
+impl Default for RANGE_CONFIG__TIMEOUT_MACROP_A_HI {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for RANGE_CONFIG__TIMEOUT_MACROP_A_LO {
+    fn default() -> Self {
+        Self(146)
+    }
+}
+
+impl Default for RANGE_CONFIG__VCSEL_PERIOD_A {
+    fn default() -> Self {
+        Self(11)
+    }
+}
+
+impl Default for RANGE_CONFIG__TIMEOUT_MACROP_B_HI {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for RANGE_CONFIG__TIMEOUT_MACROP_B_LO {
+    fn default() -> Self {
+        Self(146)
+    }
+}
+
+impl Default for RANGE_CONFIG__VCSEL_PERIOD_B {
+    fn default() -> Self {
+        Self(9)
+    }
+}
+
+impl Default for RANGE_CONFIG__SIGMA_THRESH {
+    fn default() -> Self {
+        Self(128)
+    }
+}
+
+impl Default for RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RANGE_CONFIG__VALID_PHASE_LOW {
+    fn default() -> Self {
+        Self(8)
+    }
+}
+
+impl Default for RANGE_CONFIG__VALID_PHASE_HIGH {
+    fn default() -> Self {
+        Self(128)
+    }
+}
+
+impl Default for SYSTEM__INTERMEASUREMENT_PERIOD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__FRACTIONAL_ENABLE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__GROUPED_PARAMETER_HOLD_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__THRESH_HIGH {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__THRESH_LOW {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__ENABLE_XTALK_PER_QUADRANT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__SEED_CONFIG {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SD_CONFIG__WOI_SD0 {
+    fn default() -> Self {
+        Self(4)
+    }
+}
+
+impl Default for SD_CONFIG__WOI_SD1 {
+    fn default() -> Self {
+        Self(4)
+    }
+}
+
+impl Default for SD_CONFIG__INITIAL_PHASE_SD0 {
+    fn default() -> Self {
+        Self(3)
+    }
+}
+
+impl Default for SD_CONFIG__INITIAL_PHASE_SD1 {
+    fn default() -> Self {
+        Self(3)
+    }
+}
+
+impl Default for SYSTEM__GROUPED_PARAMETER_HOLD_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SD_CONFIG__FIRST_ORDER_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SD_CONFIG__QUANTIFIER {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ROI_CONFIG__USER_ROI_CENTRE_SPAD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__SEQUENCE_CONFIG {
+    fn default() -> Self {
+        Self(255)
+    }
+}
+
+impl Default for SYSTEM__GROUPED_PARAMETER_HOLD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for POWER_MANAGEMENT__GO1_POWER_FORCE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__STREAM_COUNT_CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for FIRMWARE__ENABLE {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for SYSTEM__INTERRUPT_CLEAR {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__MODE_START {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__INTERRUPT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__RANGE_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__REPORT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__STREAM_COUNT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__AMBIENT_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__SIGMA_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__PHASE_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__AMBIENT_COUNT_RATE_MCPS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__SIGMA_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__PHASE_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__SPARE_0_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__SPARE_1_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__SPARE_2_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__SPARE_3_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__THRESH_INFO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__RANGING_TOTAL_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__RANGING_TOTAL_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT_CORE__SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PHASECAL_RESULT__REFERENCE_PHASE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PHASECAL_RESULT__VCSEL_START {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for REF_SPAD_CHAR_RESULT__NUM_ACTUAL_REF_SPADS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for REF_SPAD_CHAR_RESULT__REF_LOCATION {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for VHV_RESULT__COLDBOOT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for VHV_RESULT__SEARCH_RESULT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for VHV_RESULT__LATEST_SETTING {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__OSC_CALIBRATE_VAL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__POWERDOWN_GO1 {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for ANA_CONFIG__REF_BG_CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__REGDVDD1V2_CTRL {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for ANA_CONFIG__OSC_SLOW_CTRL {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for TEST_MODE__STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for FIRMWARE__SYSTEM_STATUS {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for FIRMWARE__MODE_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for FIRMWARE__SECONDARY_MODE_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for FIRMWARE__CAL_REPEAT_RATE_COUNTER {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__THRESH_HIGH {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__THRESH_LOW {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__ENABLE_XTALK_PER_QUADRANT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SD_CONFIG__WOI_SD0 {
+    fn default() -> Self {
+        Self(4)
+    }
+}
+
+impl Default for GPH__SD_CONFIG__WOI_SD1 {
+    fn default() -> Self {
+        Self(4)
+    }
+}
+
+impl Default for GPH__SD_CONFIG__INITIAL_PHASE_SD0 {
+    fn default() -> Self {
+        Self(3)
+    }
+}
+
+impl Default for GPH__SD_CONFIG__INITIAL_PHASE_SD1 {
+    fn default() -> Self {
+        Self(3)
+    }
+}
+
+impl Default for GPH__SD_CONFIG__FIRST_ORDER_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SD_CONFIG__QUANTIFIER {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__ROI_CONFIG__USER_ROI_CENTRE_SPAD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__SEQUENCE_CONFIG {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__GPH_ID {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SYSTEM__INTERRUPT_SET {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for INTERRUPT_MANAGER__ENABLES {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for INTERRUPT_MANAGER__CLEAR {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for INTERRUPT_MANAGER__STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_TO_HOST_BANK__WR_ACCESS_EN {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for POWER_MANAGEMENT__GO1_RESET_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PAD_STARTUP_MODE__VALUE_RO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PAD_STARTUP_MODE__VALUE_CTRL {
+    fn default() -> Self {
+        Self(48)
+    }
+}
+
+impl Default for PLL_PERIOD_US {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for INTERRUPT_SCHEDULER__DATA_OUT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for NVM_BIST__COMPLETE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for NVM_BIST__STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for IDENTIFICATION__MODEL_ID {
+    fn default() -> Self {
+        Self(234)
+    }
+}
+
+impl Default for IDENTIFICATION__MODULE_TYPE {
+    fn default() -> Self {
+        Self(170)
+    }
+}
+
+impl Default for IDENTIFICATION__REVISION_ID {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for IDENTIFICATION__MODULE_ID {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__FAST_OSC__TRIM_MAX {
+    fn default() -> Self {
+        Self(crate::settings::OSC_TRIM_DEFAULT)
+    }
+}
+
+impl Default for ANA_CONFIG__FAST_OSC__FREQ_SET {
+    fn default() -> Self {
+        Self(crate::settings::OSC_FREQ_SET_DEFAULT)
+    }
+}
+
+impl Default for ANA_CONFIG__VCSEL_TRIM {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__VCSEL_SELION {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ANA_CONFIG__VCSEL_SELION_MAX {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PROTECTED_LASER_SAFETY__LOCK_BIT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for LASER_SAFETY__KEY {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for LASER_SAFETY__KEY_RO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for LASER_SAFETY__CLIP {
+    fn default() -> Self {
+        Self(2)
+    }
+}
+
+impl Default for LASER_SAFETY__MULT {
+    fn default() -> Self {
+        Self(50)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_3 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_4 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_5 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_6 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_7 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_8 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_9 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_10 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_11 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_12 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_13 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_14 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_15 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_16 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_17 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_18 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_19 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_20 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_21 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_22 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_23 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_24 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_25 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_26 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_27 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_28 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_29 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_30 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GLOBAL_CONFIG__SPAD_ENABLES_RTN_31 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ROI_CONFIG__MODE_ROI_CENTRE_SPAD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for ROI_CONFIG__MODE_ROI_XY_SIZE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_GENERAL_PURPOSE__GP_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_GENERAL_PURPOSE__GP_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_GENERAL_PURPOSE__GP_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_GENERAL_PURPOSE__GP_3 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__CONFIG {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__OFFSET_CORRECTED_RANGE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_4 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__AMBIENT_DURATION_PRE_CALC {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__ALGO_VCSEL_PERIOD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_5 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__ALGO_TOTAL_PERIODS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__ALGO_ACCUM_PHASE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__ALGO_SIGNAL_EVENTS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__ALGO_AMBIENT_EVENTS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_6 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__ALGO_ADJUST_VCSEL_PERIOD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__NUM_SPADS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__PHASE_OUTPUT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__RATE_PER_SPAD_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_7 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_8 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__PEAK_SIGNAL_RATE_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__AVG_SIGNAL_RATE_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__AMBIENT_RATE_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__XTALK {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__CALC_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__DEBUG {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__PEAK_SIGNAL_RATE_XTALK_CORR_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_RANGE_CALC__SPARE_3 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for CLK__CONFIG {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for GPIO_LV_MUX__CTRL {
+    fn default() -> Self {
+        Self(8)
+    }
+}
+
+impl Default for GPIO_LV_PAD__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PAD_STARTUP_MODE__VALUE_RO_GO1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for HOST_IF__STATUS_GO1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MCU_CLK_GATING__CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__INTERRUPT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__RANGE_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__REPORT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__STREAM_COUNT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__SIGMA_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__PHASE_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__SIGMA_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__PHASE_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__SPARE_0_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__SPARE_1_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__SPARE_2_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT__SPARE_3_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PREV_SHADOW_RESULT_CORE__SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__DEBUG_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RESULT__DEBUG_STAGE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__THRESH_RATE_HIGH {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__THRESH_RATE_LOW {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__SYSTEM__INTERRUPT_CONFIG_GPIO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__DSS_CONFIG__ROI_MODE_CONTROL {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for GPH__DSS_CONFIG__MANUAL_EFFECTIVE_SPADS_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__DSS_CONFIG__MANUAL_BLOCK_SELECT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__DSS_CONFIG__MAX_SPADS_LIMIT {
+    fn default() -> Self {
+        Self(255)
+    }
+}
+
+impl Default for GPH__DSS_CONFIG__MIN_SPADS_LIMIT {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for GPH__MM_CONFIG__TIMEOUT_MACROP_A_HI {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__MM_CONFIG__TIMEOUT_MACROP_A_LO {
+    fn default() -> Self {
+        Self(6)
+    }
+}
+
+impl Default for GPH__MM_CONFIG__TIMEOUT_MACROP_B_HI {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__MM_CONFIG__TIMEOUT_MACROP_B_LO {
+    fn default() -> Self {
+        Self(6)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__TIMEOUT_MACROP_A_HI {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__TIMEOUT_MACROP_A_LO {
+    fn default() -> Self {
+        Self(146)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__VCSEL_PERIOD_A {
+    fn default() -> Self {
+        Self(11)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__VCSEL_PERIOD_B {
+    fn default() -> Self {
+        Self(9)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__TIMEOUT_MACROP_B_HI {
+    fn default() -> Self {
+        Self(1)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__TIMEOUT_MACROP_B_LO {
+    fn default() -> Self {
+        Self(146)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__SIGMA_THRESH {
+    fn default() -> Self {
+        Self(128)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__VALID_PHASE_LOW {
+    fn default() -> Self {
+        Self(8)
+    }
+}
+
+impl Default for GPH__RANGE_CONFIG__VALID_PHASE_HIGH {
+    fn default() -> Self {
+        Self(128)
+    }
+}
+
+impl Default for FIRMWARE__INTERNAL_STREAM_COUNT_DIV {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for FIRMWARE__INTERNAL_STREAM_COUNTER_VAL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__ROI_CTRL {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_3 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_4 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_5 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_6 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__SPARE_7 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_2 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_3 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_4 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_5 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_6 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_7 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_8 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_9 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_10 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_11 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_12 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_13 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_14 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_15 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_16 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_17 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_18 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_19 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_20 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_21 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_22 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_23 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_24 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_25 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_26 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_27 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_28 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_29 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_30 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_SPAD_EN_31 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__USER_ROI_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__MODE_ROI_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_CALC__MODE_ROI_1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SIGMA_ESTIMATOR_CALC__SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for VHV_RESULT__PEAK_SIGNAL_RATE_MCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for VHV_RESULT__SIGNAL_TOTAL_EVENTS_REF {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for PHASECAL_RESULT__PHASE_OUTPUT_REF {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_RESULT__TOTAL_RATE_PER_SPAD {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_RESULT__ENABLED_BLOCKS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for DSS_RESULT__NUM_REQUESTED_SPADS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_RESULT__INNER_INTERSECTION_RATE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_RESULT__OUTER_COMPLEMENT_RATE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for MM_RESULT__TOTAL_OFFSET {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for XTALK_CALC__XTALK_FOR_ENABLED_SPADS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for XTALK_RESULT__AVG_XTALK_USER_ROI_KCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for XTALK_RESULT__AVG_XTALK_MM_INNER_ROI_KCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for XTALK_RESULT__AVG_XTALK_MM_OUTER_ROI_KCPS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RANGE_RESULT__ACCUM_PHASE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for RANGE_RESULT__OFFSET_CORRECTED_RANGE {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_PHASECAL_RESULT__VCSEL_START {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__INTERRUPT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__RANGE_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__REPORT_STATUS {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__STREAM_COUNT {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__SIGMA_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__PHASE_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__MM_INNER_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__MM_OUTER_ACTUAL_EFFECTIVE_SPADS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__AVG_SIGNAL_COUNT_RATE_MCPS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__PEAK_SIGNAL_COUNT_RATE_MCPS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__AMBIENT_COUNT_RATE_MCPS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__SIGMA_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__PHASE_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__SPARE_0_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__SPARE_1_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__SPARE_2_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__SPARE_3_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT__THRESH_INFO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__AMBIENT_WINDOW_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__RANGING_TOTAL_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__SIGNAL_TOTAL_EVENTS_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__TOTAL_PERIODS_ELAPSED_SD1 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_RESULT_CORE__SPARE_0 {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_HI {
+    fn default() -> Self {
+        Self(0)
+    }
+}
+
+impl Default for SHADOW_PHASECAL_RESULT__REFERENCE_PHASE_LO {
+    fn default() -> Self {
+        Self(0)
+    }
+}
 
 impl Into<[u8; 2]> for Index {
     /// Convert the index to two contiguous bytes as they should appear in I2C comms.

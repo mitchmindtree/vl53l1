@@ -1,0 +1,15 @@
+[package]
+name = "vl53l1"
+version = "0.1.0"
+authors = ["mitchmindtree <mitchell.nordine@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+bitfield = "0.13.2"
+embedded-hal = "0.2.4"
+nb = "1"
+vl53l1-reg = { version = "0.1", path = "../vl53l1-reg" }
+
+# TODO
+# [features]
+# nocalib = [] # Matches the "VL53L1_NOCALIB" feature.

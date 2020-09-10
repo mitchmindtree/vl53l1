@@ -1,7 +1,37 @@
 use core::convert::TryFrom;
 
+#[derive(Debug)]
+pub enum Error<I> {
+    /// An error occurred in the I2C communication.
+    I2c(I),
+    /// Errors produced from the original API.
+    St(StError),
+    /// A warning that was considered bad enough to be an error in a particular case.
+    Warning(Warning),
+}
+
+/// Separate warnings into their own type in order to allow for handling them separately.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(i8)]
-pub enum Error {
+pub enum Warning {
+    REF_SPAD_CHAR_NOT_ENOUGH_SPADS = -28,
+    REF_SPAD_CHAR_RATE_TOO_HIGH = -29,
+    REF_SPAD_CHAR_RATE_TOO_LOW = -30,
+    OFFSET_CAL_MISSING_SAMPLES = -31,
+    OFFSET_CAL_SIGMA_TOO_HIGH = -32,
+    OFFSET_CAL_RATE_TOO_HIGH = -33,
+    OFFSET_CAL_SPAD_COUNT_TOO_LOW = -34,
+    ZONE_CAL_MISSING_SAMPLES = -35,
+    ZONE_CAL_SIGMA_TOO_HIGH = -36,
+    ZONE_CAL_RATE_TOO_HIGH = -37,
+    XTALK_MISSING_SAMPLES = -38,
+    XTALK_NO_SAMPLES_FOR_GRADIENT = -39,
+    XTALK_SIGMA_LIMIT_FOR_GRADIENT = -40,
+}
+
+#[derive(Debug)]
+#[repr(i8)]
+pub enum StError {
     CALIBRATION_WARNING = -1,
     MIN_CLIPPED = -2,
     UNDEFINED = -3,
@@ -29,20 +59,7 @@ pub enum Error {
     OFFSET_CAL_NO_SPADS_ENABLED_FAIL = -25,
     ZONE_CAL_NO_SAMPLE_FAIL = -26,
     TUNING_PARM_KEY_MISMATCH = -27,
-    // Warnings
-    REF_SPAD_CHAR_NOT_ENOUGH_SPADS = -28,
-    REF_SPAD_CHAR_RATE_TOO_HIGH = -29,
-    REF_SPAD_CHAR_RATE_TOO_LOW = -30,
-    OFFSET_CAL_MISSING_SAMPLES = -31,
-    OFFSET_CAL_SIGMA_TOO_HIGH = -32,
-    OFFSET_CAL_RATE_TOO_HIGH = -33,
-    OFFSET_CAL_SPAD_COUNT_TOO_LOW = -34,
-    ZONE_CAL_MISSING_SAMPLES = -35,
-    ZONE_CAL_SIGMA_TOO_HIGH = -36,
-    ZONE_CAL_RATE_TOO_HIGH = -37,
-    XTALK_MISSING_SAMPLES = -38,
-    XTALK_NO_SAMPLES_FOR_GRADIENT = -39,
-    XTALK_SIGMA_LIMIT_FOR_GRADIENT = -40,
+
     // Other
     NOT_IMPLEMENTED = -41,
     PLATFORM_SPECIFIC_START = -60,
@@ -57,10 +74,22 @@ pub enum Error {
 
 pub struct UnknownErrorCode(i8);
 
-impl TryFrom<i8> for Error {
+impl<I> From<StError> for Error<I> {
+    fn from(e: StError) -> Self {
+        Self::St(e)
+    }
+}
+
+impl<I> From<Warning> for Error<I> {
+    fn from(e: Warning) -> Self {
+        Self::Warning(e)
+    }
+}
+
+impl TryFrom<i8> for StError {
     type Error = UnknownErrorCode;
     fn try_from(i: i8) -> Result<Self, Self::Error> {
-        use Error::*;
+        use StError::*;
         let err = match i {
             -1 => CALIBRATION_WARNING,
             -2 => MIN_CLIPPED,
@@ -89,6 +118,26 @@ impl TryFrom<i8> for Error {
             -25 => OFFSET_CAL_NO_SPADS_ENABLED_FAIL,
             -26 => ZONE_CAL_NO_SAMPLE_FAIL,
             -27 => TUNING_PARM_KEY_MISMATCH,
+            // Other
+            -41 => NOT_IMPLEMENTED,
+            -60 => PLATFORM_SPECIFIC_START,
+            // From ll_def
+            -80 => DEVICE_FIRMWARE_TOO_OLD,
+            -85 => DEVICE_FIRMWARE_TOO_NEW,
+            -90 => UNIT_TEST_FAIL,
+            -95 => FILE_READ_FAIL,
+            -96 => FILE_WRITE_FAIL,
+            _ => return Err(UnknownErrorCode(i)),
+        };
+        Ok(err)
+    }
+}
+
+impl TryFrom<i8> for Warning {
+    type Error = UnknownErrorCode;
+    fn try_from(i: i8) -> Result<Self, Self::Error> {
+        use Warning::*;
+        let err = match i {
             // Warnings
             -28 => REF_SPAD_CHAR_NOT_ENOUGH_SPADS,
             -29 => REF_SPAD_CHAR_RATE_TOO_HIGH,
@@ -103,15 +152,6 @@ impl TryFrom<i8> for Error {
             -38 => XTALK_MISSING_SAMPLES,
             -39 => XTALK_NO_SAMPLES_FOR_GRADIENT,
             -40 => XTALK_SIGMA_LIMIT_FOR_GRADIENT,
-            // Other
-            -41 => NOT_IMPLEMENTED,
-            -60 => PLATFORM_SPECIFIC_START,
-            // From ll_def
-            -80 => DEVICE_FIRMWARE_TOO_OLD,
-            -85 => DEVICE_FIRMWARE_TOO_NEW,
-            -90 => UNIT_TEST_FAIL,
-            -95 => FILE_READ_FAIL,
-            -96 => FILE_WRITE_FAIL,
             _ => return Err(UnknownErrorCode(i)),
         };
         Ok(err)
