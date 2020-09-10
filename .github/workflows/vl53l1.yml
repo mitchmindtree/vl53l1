@@ -89,6 +89,8 @@ jobs:
     - name: Cargo publish vl53l1-reg
       continue-on-error: true
       run: cargo publish --token $CRATESIO_TOKEN --manifest-path lib/vl53l1-reg/Cargo.toml
+    - name: Wait for cargo
+      run: sleep 10s
     - name: Cargo publish vl53l1
       continue-on-error: true
       run: cargo publish --token $CRATESIO_TOKEN --manifest-path lib/vl53l1/Cargo.toml
