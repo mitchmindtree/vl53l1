@@ -95,13 +95,12 @@ macro_rules! entries_struct {
         mod $first {
             #[test]
             // Ensure all entries are ordered consecutively.
+            #[allow(unused_assignments)]
             fn test_entry_order() {
-                use crate::{self, Entry};
-
-                let mut last = <$First as Entry>::INDEX as u16;
+                let mut last = <$First as crate::Entry>::INDEX as u16;
                 let mut last_size = core::mem::size_of::<$First>() as u16;
                 $(
-                    let next = <$Entry as Entry>::INDEX as u16;
+                    let next = <$Entry as crate::Entry>::INDEX as u16;
                     let size = core::mem::size_of::<$Entry>() as u16;
                     assert!(
                         last + last_size <= next,
