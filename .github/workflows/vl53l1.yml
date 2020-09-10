@@ -53,10 +53,7 @@ jobs:
     - name: Add embedded target
       run: rustup target add thumbv7m-none-eabi
     - name: cargo check examples
-      uses: actions-rs/cargo@v1
-      with:
-        command: check
-        args: --manifest-path examples/stm32f107-demo/Cargo.toml --verbose
+      run: cd examples/stm32f107-demo && cargo check && cd ../..
 
   # Check the docs build.
   cargo-doc:
