@@ -1,4 +1,4 @@
-# vl53l1 [![Actions Status](https://github.com/mitchmindtree/vl53l1/workflows/vl53l1/badge.svg)](https://github.com/mitchmindtree/vl53l1/actions) [![Crates.io](https://img.shields.io/crates/v/vl53l1.svg)](https://crates.io/crates/vl53l1) [![Crates.io](https://img.shields.io/crates/l/vl53l1.svg)](https://github.com/mitchmindtree/vl53l1/blob/master/LICENSE-MIT)
+# vl53l1 [![Actions Status](https://github.com/mitchmindtree/vl53l1/workflows/vl53l1/badge.svg)](https://github.com/mitchmindtree/vl53l1/actions) [![Crates.io](https://img.shields.io/crates/l/vl53l1.svg)](https://github.com/mitchmindtree/vl53l1/blob/master/LICENSE-MIT)
 
 A pure-Rust port of the official ST VL53L1X ToF sensor C API (STSW-IMG007).
 
