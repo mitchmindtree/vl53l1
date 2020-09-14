@@ -340,6 +340,7 @@ pub struct OffsetRangeResults {
 }
 
 #[derive(Debug)]
+#[cfg_attr(feature = "ufmt", derive(ufmt::derive::uDebug))]
 pub struct CalStatus(pub Result<Outcome<()>, StError>);
 
 pub struct OffsetcalConfig {
@@ -805,6 +806,7 @@ pub struct RangingMeasurementData {
 /// User Zone (region of interest) parameters.
 ///
 /// Each coordinate is in the 0...15 range.
+#[derive(Clone, Copy)]
 pub struct UserRoi {
     pub top_left_x: u8,
     pub top_left_y: u8,
@@ -4147,7 +4149,7 @@ where
     Ok(())
 }
 
-// Enable next range by sending handshake which clears the interrupt.
+/// Enable next range by sending handshake which clears the interrupt.
 fn clear_interrupt_and_enable_next_range<I>(
     dev: &mut Device,
     i2c: &mut I,
