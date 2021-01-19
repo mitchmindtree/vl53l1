@@ -1493,6 +1493,18 @@ where
     Ok(())
 }
 
+/// Stops any in-progress measurement.
+///
+/// If called during a range measurement, the measurement is aborted immediately.
+pub fn stop_measurement<I>(dev: &mut Device, i2c: &mut I) -> Result<(), Error<I::Error>>
+where
+    I: i2c::Write,
+{
+    stop_range(dev, i2c).map_err(Error::I2c)?;
+    dev.data.pal_state = State::Idle;
+    Ok(())
+}
+
 /// Allows loading of the device settings that are specific for a given use case.
 pub fn static_init(dev: &mut Device) -> Result<(), StError> {
     dev.data.pal_state = State::Idle;
