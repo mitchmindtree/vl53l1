@@ -1,6 +1,6 @@
 [package]
 name = "vl53l1"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["mitchmindtree <mitchell.nordine@gmail.com>"]
 description = "A pure-Rust port of the official ST VL53L1X ToF sensor C API."
 readme = "../../README.md"
@@ -14,6 +14,7 @@ edition = "2018"
 bitfield = "0.13.2"
 embedded-hal = "0.2.4"
 nb = "1"
+ufmt = { version = "0.1.0", optional = true }
 vl53l1-reg = { version = "0.1", path = "../vl53l1-reg" }
 
 # TODO

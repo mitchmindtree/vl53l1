@@ -3,6 +3,7 @@ use core::convert::TryFrom;
 
 /// An alternative to the `Ok` variant of `Result` that allows for handling warnings.
 #[derive(Debug, Default)]
+#[cfg_attr(feature = "ufmt", derive(ufmt::derive::uDebug))]
 #[must_use = "this `Outcome` may contain a warning, which should be handled"]
 pub struct Outcome<T> {
     value: T,

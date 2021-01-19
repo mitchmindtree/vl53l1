@@ -1,6 +1,7 @@
 use core::convert::TryFrom;
 
 #[derive(Debug)]
+#[cfg_attr(feature = "ufmt", derive(ufmt::derive::uDebug))]
 pub enum Error<I> {
     /// An error occurred in the I2C communication.
     I2c(I),
@@ -12,6 +13,7 @@ pub enum Error<I> {
 
 /// Separate warnings into their own type in order to allow for handling them separately.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "ufmt", derive(ufmt::derive::uDebug))]
 #[repr(i8)]
 pub enum Warning {
     REF_SPAD_CHAR_NOT_ENOUGH_SPADS = -28,
@@ -30,6 +32,7 @@ pub enum Warning {
 }
 
 #[derive(Debug)]
+#[cfg_attr(feature = "ufmt", derive(ufmt::derive::uDebug))]
 #[repr(i8)]
 pub enum StError {
     CALIBRATION_WARNING = -1,
@@ -72,6 +75,7 @@ pub enum StError {
     FILE_WRITE_FAIL = -96,
 }
 
+#[cfg_attr(feature = "ufmt", derive(ufmt::derive::uDebug))]
 pub struct UnknownErrorCode(i8);
 
 impl<I> From<StError> for Error<I> {
