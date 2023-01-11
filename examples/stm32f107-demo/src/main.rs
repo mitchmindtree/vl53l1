@@ -39,9 +39,6 @@ fn main() -> ! {
     let scl = gpiob.pb8.into_alternate_open_drain(&mut gpiob.crh);
     let sda = gpiob.pb9.into_alternate_open_drain(&mut gpiob.crh);
 
-    // let i2c_mode = hal::i2c::Mode::Standard {
-    //     frequency: 100_000.hz(),
-    // };
     let i2c_mode = hal::i2c::Mode::Fast {
         frequency: 400_000.hz(),
         duty_cycle: hal::i2c::DutyCycle::Ratio2to1,
@@ -70,15 +67,18 @@ fn main() -> ! {
     let mut vl53l1_dev = vl53l1::Device::default();
 
     rprintln!("Software reset...");
-    vl53l1::software_reset(&mut vl53l1_dev, &mut i2c, &mut delay).unwrap();
+    while let Err(e) = vl53l1::software_reset(&mut vl53l1_dev, &mut i2c, &mut delay) {
+        rprintln!("  Error: {:?}", e);
+        delay.delay_ms(100_u32);
+    }
     rprintln!("  Complete");
 
     rprintln!("Data init...");
-    vl53l1::data_init(&mut vl53l1_dev, &mut i2c).unwrap();
+    while vl53l1::data_init(&mut vl53l1_dev, &mut i2c).is_err() {}
     rprintln!("  Complete");
 
     rprintln!("Static init...");
-    vl53l1::static_init(&mut vl53l1_dev).unwrap();
+    while vl53l1::static_init(&mut vl53l1_dev).is_err() {}
     rprintln!("  Complete");
 
     rprintln!("Setting region of interest...");
@@ -88,37 +88,40 @@ fn main() -> ! {
         top_left_x: 6,
         top_left_y: 10,
     };
-    vl53l1::set_user_roi(&mut vl53l1_dev, roi).unwrap();
+    while vl53l1::set_user_roi(&mut vl53l1_dev, roi.clone()).is_err() {}
     rprintln!("  Complete");
 
     rprintln!("Setting timing budget and inter-measurement period...");
-    vl53l1::set_measurement_timing_budget_micro_seconds(&mut vl53l1_dev, 50_000).unwrap();
-    vl53l1::set_inter_measurement_period_milli_seconds(&mut vl53l1_dev, 60).unwrap();
+    while vl53l1::set_measurement_timing_budget_micro_seconds(&mut vl53l1_dev, 100_000).is_err() {}
+    while vl53l1::set_inter_measurement_period_milli_seconds(&mut vl53l1_dev, 200).is_err() {}
 
     rprintln!("Start measurement...");
-    vl53l1::start_measurement(&mut vl53l1_dev, &mut i2c).unwrap();
+    while vl53l1::start_measurement(&mut vl53l1_dev, &mut i2c).is_err() {}
     rprintln!("  Complete");
-
-    rprintln!("Wait measurement data ready...");
-    vl53l1::wait_measurement_data_ready(&mut vl53l1_dev, &mut i2c, &mut delay).unwrap();
-    rprintln!("  Ready");
-
-    rprintln!("Get ranging measurement data...");
-    let rmd = vl53l1::get_ranging_measurement_data(&mut vl53l1_dev, &mut i2c).unwrap();
-    vl53l1::clear_interrupt_and_start_measurement(&mut vl53l1_dev, &mut i2c, &mut delay).unwrap();
-    rprintln!("{:#?}", rmd);
 
     loop {
         rprintln!("Wait measurement data ready...");
-        vl53l1::wait_measurement_data_ready(&mut vl53l1_dev, &mut i2c, &mut delay).unwrap();
+        if vl53l1::wait_measurement_data_ready(&mut vl53l1_dev, &mut i2c, &mut delay).is_err() {
+            delay.delay_ms(100u32);
+            continue;
+        }
         rprintln!("  Ready");
 
         rprintln!("Get ranging measurement data...");
-        let rmd = vl53l1::get_ranging_measurement_data(&mut vl53l1_dev, &mut i2c).unwrap();
-        vl53l1::clear_interrupt_and_start_measurement(&mut vl53l1_dev, &mut i2c, &mut delay)
-            .unwrap();
-        rprintln!("  {:#?} mm", rmd.range_milli_meter);
+        match vl53l1::get_ranging_measurement_data(&mut vl53l1_dev, &mut i2c) {
+            Err(e) => {
+                rprintln!("  Error: {:?}", e);
+                delay.delay_ms(70u32);
+            }
+            Ok(rmd) => {
+                rprintln!("  {:#?} mm", rmd.range_milli_meter);
+                continue;
+            }
+        }
 
-        //delay.delay_ms(1000_u32);
+        while let Err(e) = vl53l1::clear_interrupt_and_start_measurement(&mut vl53l1_dev, &mut i2c, &mut delay) {
+            rprintln!("  Error: {:?}", e);
+            delay.delay_ms(70u32);
+        }
     }
 }
