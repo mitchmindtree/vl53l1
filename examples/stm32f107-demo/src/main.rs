@@ -119,7 +119,9 @@ fn main() -> ! {
             }
         }
 
-        while let Err(e) = vl53l1::clear_interrupt_and_start_measurement(&mut vl53l1_dev, &mut i2c, &mut delay) {
+        while let Err(e) =
+            vl53l1::clear_interrupt_and_start_measurement(&mut vl53l1_dev, &mut i2c, &mut delay)
+        {
             rprintln!("  Error: {:?}", e);
             delay.delay_ms(70u32);
         }
