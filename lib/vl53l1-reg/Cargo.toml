@@ -1,6 +1,6 @@
 [package]
 name = "vl53l1-reg"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["mitchmindtree <mitchell.nordine@gmail.com>"]
 description = "A crate for low-level access to the registers on the VL53L1X."
 readme = "../../README.md"
