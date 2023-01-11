@@ -128,7 +128,7 @@ macro_rules! entries_struct {
         <$Ty as crate::Entry>::INDEX as usize + core::mem::size_of::<$Ty>()
     };
     (following_entry_index $Ty:ty, $($Entries:ty),*) => {
-        entries_struct!(following_entry_index $($Entries),*);
+        entries_struct!(following_entry_index $($Entries),*)
     };
 }
 
