@@ -13,5 +13,3 @@ edition = "2018"
 [dependencies]
 bitfield = "0.13.2"
 embedded-hal = "0.2.4"
-# TODO remove this
-rtt-target = { version = "0.2.0", features = ["cortex-m"] }
